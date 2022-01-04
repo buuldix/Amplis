@@ -63,14 +63,13 @@ namespace Amplis
             float deltaSecondes = (float)gameTime.ElapsedGameTime.TotalSeconds;
             KeyboardState k = Keyboard.GetState();
 
-            if (_persoPosition.Y < _jumpStart)
+            if (!_grounded)
             {
                 _yVelocity += 1;
             }
             else
             {
                 _yVelocity = 0;
-                _grounded = true;
             }
                 
             if (k.IsKeyDown(Keys.Space)&&_grounded)
@@ -84,7 +83,15 @@ namespace Amplis
             else if (k.IsKeyDown(Keys.Q) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
                 _persoPosition.X -= _xVelocity;
 
-
+            ushort tx = (ushort)(_persoPosition.X / _tiledMap.TileWidth);
+            ushort ty = (ushort)(_persoPosition.Y / _tiledMap.TileHeight + 3);
+            if (!IsCollision(tx, ty))
+            {
+                //_persoPosition.Y += _yVelocity;
+                _grounded = false;
+            }
+            else
+                _grounded = true;
             _persoPosition.Y += _yVelocity;
             base.Update(gameTime);
         }
@@ -98,6 +105,15 @@ namespace Amplis
             _spriteBatch.Draw(_perso, _persoPosition);
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+        private bool IsCollision(ushort x, ushort y)
+        {
+            TiledMapTile? tile;
+            if (_mapLayer.TryGetTile(x, y, out tile) == false)
+                return false;
+            if (!tile.Value.IsBlank)
+                return true;
+            return false;
         }
     }
 }
