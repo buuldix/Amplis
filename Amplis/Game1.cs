@@ -8,6 +8,7 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
+using System;
 
 namespace Amplis
 {
@@ -51,6 +52,9 @@ namespace Amplis
             _perso = new AnimatedSprite(spriteSheet);
             // TODO: use this.Content to load your game content here
             _tiledMap = Content.Load<TiledMap>("map");
+            _graphics.PreferredBackBufferHeight = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
+            _graphics.PreferredBackBufferWidth = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
+            _graphics.ApplyChanges();
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
             _mapLayer = _tiledMap.GetLayer<TiledMapTileLayer>("sol");
         }
@@ -60,7 +64,7 @@ namespace Amplis
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             float deltaSecondes = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            String animation = "walkWest";
+            string animation = "idle";
             KeyboardState k = Keyboard.GetState();
 
             if (!_grounded)
@@ -75,24 +79,24 @@ namespace Amplis
             if (k.IsKeyDown(Keys.Space)&&_grounded)
             {
                 _yVelocity = -10;
-                _grounded = false;
             }
             
+            
+                
+
+            ushort tx = (ushort)(_persoPosition.X / _tiledMap.TileWidth);
+            ushort ty = (ushort)(_persoPosition.Y / _tiledMap.TileHeight + 3);
             if (k.IsKeyDown(Keys.D) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
             {
                 _persoPosition.X += _xVelocity;
                 animation = "walkEast";
             }
-                
+
             else if (k.IsKeyDown(Keys.Q) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
             {
                 _persoPosition.X -= _xVelocity;
                 animation = "walkWest";
-            }
-                
-
-            ushort tx = (ushort)(_persoPosition.X / _tiledMap.TileWidth);
-            ushort ty = (ushort)(_persoPosition.Y / _tiledMap.TileHeight + 3);
+            } 
             if (!IsCollision(tx, ty))
             {
                 //_persoPosition.Y += _yVelocity;
@@ -102,6 +106,7 @@ namespace Amplis
                 _grounded = true;
             _persoPosition.Y += _yVelocity;
             _perso.Play(animation);
+            _perso.Update(deltaSecondes);
             base.Update(gameTime);
         }
 

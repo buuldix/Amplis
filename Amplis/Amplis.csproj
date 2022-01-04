@@ -29,6 +29,10 @@
     <PackageReference Include="MonoGame.Extended.Tiled" Version="3.8.0" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+    <PackageReference Include="System.Windows.Extensions" Version="6.0.0" />
+    <Reference Include="System.Windows.Forms">
+      <HintPath>P:\S1\R1_01_DEV\Monogame\dll\System.Windows.Forms.dll</HintPath>
+    </Reference>
 	<None Update="Content\motw.sf">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
