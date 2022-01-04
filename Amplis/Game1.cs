@@ -61,6 +61,7 @@ namespace Amplis
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             float deltaSecondes = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            String animation = "walkWest";
             KeyboardState k = Keyboard.GetState();
 
             if (!_grounded)
@@ -79,9 +80,17 @@ namespace Amplis
             }
             
             if (k.IsKeyDown(Keys.D) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
+            {
                 _persoPosition.X += _xVelocity;
+                animation = "walkEast";
+            }
+                
             else if (k.IsKeyDown(Keys.Q) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
+            {
                 _persoPosition.X -= _xVelocity;
+                animation = "walkWest";
+            }
+                
 
             ushort tx = (ushort)(_persoPosition.X / _tiledMap.TileWidth);
             ushort ty = (ushort)(_persoPosition.Y / _tiledMap.TileHeight + 3);
@@ -93,6 +102,7 @@ namespace Amplis
             else
                 _grounded = true;
             _persoPosition.Y += _yVelocity;
+            _perso.Play(animation);
             base.Update(gameTime);
         }
 
