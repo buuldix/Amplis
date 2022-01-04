@@ -78,17 +78,10 @@ namespace Amplis
                 _yVelocity = -10;
                 _grounded = false;
             }
-            /*else if (k.IsKeyDown(Keys.Space))
-            {
-                if (k.IsKeyDown(Keys.D))
-                    _persoPosition.X += 10 * _xVelocity;
-                else if (k.IsKeyDown(Keys.Q))
-                    _persoPosition.X -= 10 * _xVelocity;
-            }*/
             
-            if (k.IsKeyDown(Keys.D))
+            if (k.IsKeyDown(Keys.D) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
                 _persoPosition.X += _xVelocity;
-            else if (k.IsKeyDown(Keys.Q))
+            else if (k.IsKeyDown(Keys.Q) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
                 _persoPosition.X -= _xVelocity;
 
 
