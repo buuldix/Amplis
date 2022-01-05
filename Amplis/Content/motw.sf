@@ -21,7 +21,7 @@
       "frameDuration": 0.1
     },
     "walkEast": {
-      "frames": [24,25,26,25],
+      "frames": [24,25,26,24],
       "isLooping": false,
       "frameDuration": 0.1
     },

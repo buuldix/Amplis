@@ -9,6 +9,7 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
+using System.Windows;
 
 namespace Amplis
 {
@@ -35,7 +36,6 @@ namespace Amplis
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             _persoPosition = new Vector2(100, 100);
             _jumpStart = (int)_persoPosition.Y;
             _yVelocity = 0;
@@ -47,14 +47,14 @@ namespace Amplis
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            // spritesheet
             SpriteSheet spriteSheet = Content.Load<SpriteSheet>("motw.sf", new JsonContentLoader());
             _perso = new AnimatedSprite(spriteSheet);
-            // TODO: use this.Content to load your game content here
             _tiledMap = Content.Load<TiledMap>("map");
-            _graphics.PreferredBackBufferHeight = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
-            _graphics.PreferredBackBufferWidth = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
-            _graphics.ApplyChanges();
+            //_graphics.PreferredBackBufferHeight = 1920;
+            //_graphics.PreferredBackBufferWidth = 1080;
+            //_graphics.IsFullScreen = true;
+            //_graphics.ApplyChanges();
+            //_graphics.ToggleFullScreen();
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
             _mapLayer = _tiledMap.GetLayer<TiledMapTileLayer>("sol");
         }
@@ -67,39 +67,58 @@ namespace Amplis
             string animation = "idle";
             KeyboardState k = Keyboard.GetState();
 
+            ushort tx = (ushort)(_persoPosition.X / _tiledMap.TileWidth);
+            ushort txright= (ushort)(_persoPosition.X / _tiledMap.TileWidth+1);
+            ushort txleft = (ushort)(_persoPosition.X / _tiledMap.TileWidth-1);
+            ushort ty = (ushort)(_persoPosition.Y / _tiledMap.TileHeight + 3);
+            ushort tyfeet = (ushort)(_persoPosition.Y / _tiledMap.TileHeight + 2);
+            ushort tyarm = (ushort)(_persoPosition.Y / _tiledMap.TileHeight + 1);
+            ushort tychest = (ushort)(_persoPosition.Y / _tiledMap.TileHeight);
+            ushort tyhead = (ushort)(_persoPosition.Y / _tiledMap.TileHeight -1);
+            ushort tyoverhead = (ushort)(_persoPosition.Y / _tiledMap.TileHeight - 2);
+
+
+
             if (!_grounded)
             {
-                _yVelocity += 1;
+                if (_yVelocity < 5)
+                    _yVelocity += 1;
+                else if (_yVelocity < 0 && IsCollision(tx, tyoverhead))
+                    _yVelocity = 0;
             }
             else
-            {
                 _yVelocity = 0;
-            }
                 
             if (k.IsKeyDown(Keys.Space)&&_grounded)
             {
-                _yVelocity = -10;
+                if(!IsCollision(tx,tyoverhead))
+                    _yVelocity = -10;
             }
             
             
                 
 
-            ushort tx = (ushort)(_persoPosition.X / _tiledMap.TileWidth);
-            ushort ty = (ushort)(_persoPosition.Y / _tiledMap.TileHeight + 3);
+
             if (k.IsKeyDown(Keys.D) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
             {
-                _persoPosition.X += _xVelocity;
-                animation = "walkEast";
+                if (!(IsCollision(txright, tyfeet) || IsCollision(txright, tyhead) || IsCollision(txright, tychest) || IsCollision(txright, tyarm)))
+                {
+                    _persoPosition.X += _xVelocity;
+                    animation = "walkEast";
+                }
+                
             }
 
             else if (k.IsKeyDown(Keys.Q) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
             {
-                _persoPosition.X -= _xVelocity;
-                animation = "walkWest";
+                if (!(IsCollision(txleft, tyfeet)||IsCollision(txleft,tyhead) || IsCollision(txleft, tychest) || IsCollision(txleft, tyarm)))
+                {
+                    _persoPosition.X -= _xVelocity;
+                    animation = "walkWest";
+                }
             } 
             if (!IsCollision(tx, ty))
             {
-                //_persoPosition.Y += _yVelocity;
                 _grounded = false;
             }
             else
@@ -113,7 +132,6 @@ namespace Amplis
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            // TODO: Add your drawing code here
             _spriteBatch.Begin();
             _tiledMapRenderer.Draw();
             _spriteBatch.Draw(_perso, _persoPosition);
