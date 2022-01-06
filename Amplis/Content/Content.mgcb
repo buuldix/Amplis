@@ -10,12 +10,12 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Content.Pipeline.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Graphics.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Tiled.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\Newtonsoft.Json.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\System.Windows.Forms.dll
+/reference:P:\R1_01_InitiationDev_C#\dll MonoGame\MonoGame.Extended.Content.Pipeline.dll
+/reference:P:\R1_01_InitiationDev_C#\dll MonoGame\MonoGame.Extended.dll
+/reference:P:\R1_01_InitiationDev_C#\dll MonoGame\MonoGame.Extended.Graphics.dll
+/reference:P:\R1_01_InitiationDev_C#\dll MonoGame\MonoGame.Extended.Tiled.dll
+/reference:P:\R1_01_InitiationDev_C#\dll MonoGame\Newtonsoft.Json.dll
+/reference:P:\R1_01_InitiationDev_C#\dll MonoGame\System.Windows.Forms.dll
 
 
 #---------------------------------- Content ---------------------------------#
