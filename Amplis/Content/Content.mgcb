@@ -15,7 +15,6 @@
 /reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Graphics.dll
 /reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Tiled.dll
 /reference:P:\S1\R1_01_DEV\Monogame\dll\Newtonsoft.Json.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\System.Windows.Forms.dll
 
 
 #---------------------------------- Content ---------------------------------#

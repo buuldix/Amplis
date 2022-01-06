@@ -27,6 +27,8 @@ namespace Amplis
         private TiledMap _tiledMap;
         private TiledMapTileLayer _mapLayer;
         private TiledMapRenderer _tiledMapRenderer;
+        private Personnage p = new Personnage();
+        private int _pers;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -41,6 +43,7 @@ namespace Amplis
             _yVelocity = 0;
             _xVelocity = 2;
             _grounded = true;
+            _pers = 0;
             base.Initialize();
         }
 
@@ -50,10 +53,10 @@ namespace Amplis
             SpriteSheet spriteSheet = Content.Load<SpriteSheet>("motw.sf", new JsonContentLoader());
             _perso = new AnimatedSprite(spriteSheet);
             _tiledMap = Content.Load<TiledMap>("map");
-            //_graphics.PreferredBackBufferHeight = 1920;
-            //_graphics.PreferredBackBufferWidth = 1080;
-            //_graphics.IsFullScreen = true;
-            //_graphics.ApplyChanges();
+            _graphics.PreferredBackBufferWidth = 1600;
+            _graphics.PreferredBackBufferHeight = 900;
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
             //_graphics.ToggleFullScreen();
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
             _mapLayer = _tiledMap.GetLayer<TiledMapTileLayer>("sol");
@@ -64,7 +67,7 @@ namespace Amplis
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             float deltaSecondes = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            string animation = "idle";
+            string animation = p.Anim[_pers, 0];
             KeyboardState k = Keyboard.GetState();
 
             ushort tx = (ushort)(_persoPosition.X / _tiledMap.TileWidth);
@@ -83,7 +86,7 @@ namespace Amplis
             {
                 if (_yVelocity < 5)
                     _yVelocity += 1;
-                else if (_yVelocity < 0 && IsCollision(tx, tyoverhead))
+                if (_yVelocity < 0 && IsCollision(tx, tyoverhead, "sol"))
                     _yVelocity = 0;
             }
             else
@@ -91,36 +94,47 @@ namespace Amplis
                 
             if (k.IsKeyDown(Keys.Space)&&_grounded)
             {
-                if(!IsCollision(tx,tyoverhead))
+                if(!IsCollision(tx,tyoverhead, "sol"))
                     _yVelocity = -10;
             }
-            
-            
-                
 
+
+
+            if (k.IsKeyDown(Keys.J))
+            {
+                if(_pers == 0)
+                {
+                    _pers = 1;
+                }
+                else
+                {
+                    _pers = 0;
+                }
+            }
 
             if (k.IsKeyDown(Keys.D) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
             {
-                if (!(IsCollision(txright, tyfeet) || IsCollision(txright, tyhead) || IsCollision(txright, tychest) || IsCollision(txright, tyarm)))
+                if (!(IsCollision(txright, tyfeet, "sol") || IsCollision(txright, tyhead, "sol") || IsCollision(txright, tychest, "sol") || IsCollision(txright, tyarm, "sol")))
                 {
                     _persoPosition.X += _xVelocity;
-                    animation = "walkEast";
+                    animation = p.Anim[_pers, 3];
                 }
                 
             }
 
             else if (k.IsKeyDown(Keys.Q) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
             {
-                if (!(IsCollision(txleft, tyfeet)||IsCollision(txleft,tyhead) || IsCollision(txleft, tychest) || IsCollision(txleft, tyarm)))
+                if (!(IsCollision(txleft, tyfeet, "sol") ||IsCollision(txleft,tyhead, "sol") || IsCollision(txleft, tychest, "sol") || IsCollision(txleft, tyarm, "sol")))
                 {
                     _persoPosition.X -= _xVelocity;
-                    animation = "walkWest";
+                    animation = p.Anim[_pers, 2];
                 }
-            } 
-            if (!IsCollision(tx, ty))
-            {
-                _grounded = false;
             }
+            if (!IsCollision(tx, ty, "sol"))
+                _grounded = false;
+            else if (IsCollision(tx, ty, "batiments"))
+                _persoPosition = new Vector2(100, 100);
+
             else
                 _grounded = true;
             _persoPosition.Y += _yVelocity;
@@ -138,9 +152,10 @@ namespace Amplis
             _spriteBatch.End();
             base.Draw(gameTime);
         }
-        private bool IsCollision(ushort x, ushort y)
+        private bool IsCollision(ushort x, ushort y,String layer)
         {
             TiledMapTile? tile;
+            _mapLayer = _tiledMap.GetLayer<TiledMapTileLayer>(layer);
             if (_mapLayer.TryGetTile(x, y, out tile) == false)
                 return false;
             if (!tile.Value.IsBlank)
