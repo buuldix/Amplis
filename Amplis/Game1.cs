@@ -17,6 +17,7 @@ namespace Amplis
 {
     public class Game1 : Game
     {
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -60,7 +61,7 @@ namespace Amplis
             this.TiledMap = Content.Load<TiledMap>("map");
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1072;
-            _graphics.IsFullScreen = false;
+            _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             //_graphics.ToggleFullScreen();
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, this.TiledMap);
@@ -110,14 +111,16 @@ namespace Amplis
             ushort tyoverhead = (ushort)(_persoPosition.Y / this.TiledMap.TileHeight - 2);
 
 
-            if (IsCollision(tx, tychest, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Z)))
+            if (IsCollision(tx, tychest, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Up)))
                 _climbing = true;
             else
                 _climbing = false;
             if (_climbing)
             {
-                if (k.IsKeyDown(Keys.Z))
+                if (k.IsKeyDown(Keys.Up))
                     _yVelocity = -5;
+                if (k.IsKeyDown(Keys.Down))
+                    _yVelocity = 5;
 
             }
             else if (!_grounded&&!_climbing)
@@ -149,7 +152,7 @@ namespace Amplis
                     
             }
 
-            if (k.IsKeyDown(Keys.D) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
+            if (k.IsKeyDown(Keys.Right) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
             {
                 if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision")))
                 {
@@ -160,7 +163,7 @@ namespace Amplis
                 
             }
 
-            else if (k.IsKeyDown(Keys.Q) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
+            else if (k.IsKeyDown(Keys.Left) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
             {
                 if (!(IsCollision(txleft, tyfeet, "Collision") ||IsCollision(txleft,tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision")))
                 {
