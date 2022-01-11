@@ -92,7 +92,7 @@ namespace Amplis
             ushort tyoverhead = (ushort)(_persoPosition.Y / this.TiledMap.TileHeight - 2);
 
 
-            if (IsCollision(tx, tyfeet, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Z)))
+            if (IsCollision(tx, tyfeet, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Z) || k.IsKeyDown(Keys.Down) || k.IsKeyDown(Keys.Up)))
                 _climbing = true;
             else
                 _climbing = false;
@@ -101,7 +101,7 @@ namespace Amplis
 
                 if (k.IsKeyDown(Keys.Up) || k.IsKeyDown(Keys.Z))
                     _yVelocity = -5;
-                else if (k.IsKeyDown(Keys.S) && IsCollision(tx, ty, "Grimpe"))
+                else if ((k.IsKeyDown(Keys.S) || k.IsKeyDown(Keys.Down)) && IsCollision(tx, ty, "Grimpe"))
                     _yVelocity = 5;
             }
             else if (!_grounded&&!_climbing)
@@ -134,7 +134,7 @@ namespace Amplis
                     
             }
             if (IsCollision(tx, tyfeet, "Mort"))
-                Exit();
+                _persoPosition = new Vector2(100, 500);
 
 
             if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
