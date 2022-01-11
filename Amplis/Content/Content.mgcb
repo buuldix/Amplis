@@ -47,15 +47,15 @@
 /processor:TiledMapTilesetProcessor
 /build:decors.tsx
 
+#begin lvl2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:lvl2.tmx
+
 #begin map.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:map.tmx
-
-#begin maptest.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:maptest.tmx
 
 #begin Medieval_props_free.png
 /importer:TextureImporter

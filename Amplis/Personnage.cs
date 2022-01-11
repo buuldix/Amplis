@@ -16,6 +16,7 @@ namespace Amplis
         private int _yVelocity;
         private int _xVelocity;
         private bool climbing;
+        private bool canGo;
         int pers;
         public Personnage()
         {
@@ -26,6 +27,7 @@ namespace Amplis
             XVelocity = 4;
             Grounded = true;
             Climbing = false;
+            CanGo = false;
         }
 
         public string[,] Anim { get => anim; set => anim = value; }
@@ -38,6 +40,7 @@ namespace Amplis
         public int YVelocity { get => _yVelocity; set => _yVelocity = value; }
         public int XVelocity { get => _xVelocity; set => _xVelocity = value; }
         public bool Climbing { get => climbing; set => climbing = value; }
+        public bool CanGo { get => canGo; set => canGo = value; }
 
         public void ChangePers()
         {

@@ -13,8 +13,8 @@ namespace Amplis
     {
         private Game1 _myGame; // pour récupérer le jeu en cours
         private int _map;
-        String[] scene = new String[] { "map", "maptest" };
-        Vector2[] spawn = new Vector2[] { new Vector2(100, 1200), new Vector2(100, 650) };
+        String[] scene = new String[] { "map", "lvl2" };
+        Vector2[] spawn = new Vector2[] { new Vector2(100, 800), new Vector2(100, 650) };
 
 
         public int Map { get => _map; set => _map = value; }
@@ -23,12 +23,12 @@ namespace Amplis
         {
             _myGame = game;
             Map = map;
-            _myGame.p.Position = spawn[this.Map];
+            _myGame.p.Position = spawn[Map];
         }
 
         public override void LoadContent()
         {
-            _myGame.TiledMap = Content.Load<TiledMap>(scene[this.Map]);
+            _myGame.TiledMap = Content.Load<TiledMap>(scene[Map]);
             _myGame.TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _myGame.TiledMap);
             base.LoadContent();
         }
