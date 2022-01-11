@@ -37,7 +37,7 @@ namespace Amplis
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
         }
 
         protected override void Initialize()
@@ -136,8 +136,9 @@ namespace Amplis
             if (k.IsKeyDown(Keys.Space)&&_grounded)
             {
                 if(!IsCollision(tx,tyoverhead, "Collision"))
-                    _yVelocity = -11;
+                    _yVelocity = -13;
             }
+            _xVelocity = 4;
 
 
 
@@ -151,8 +152,11 @@ namespace Amplis
                 }
                     
             }
+            if (IsCollision(tx, tyfeet, "Mort"))
+                Exit();
 
-            if (k.IsKeyDown(Keys.Right) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
+
+                if (k.IsKeyDown(Keys.Right) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
             {
                 if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision")))
                 {
