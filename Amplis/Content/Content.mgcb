@@ -16,7 +16,6 @@
 /reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Tiled.dll
 /reference:P:\S1\R1_01_DEV\Monogame\dll\Newtonsoft.Json.dll
 
-
 #---------------------------------- Content ---------------------------------#
 
 #begin _Spritesheet.png
@@ -43,10 +42,39 @@
 /processorParam:TextureFormat=Color
 /build:Background.png
 
+#begin decors.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:decors.tsx
+
 #begin map.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:map.tmx
+
+#begin Medieval_props_free.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Medieval_props_free.png
+
+#begin Medieval_tiles_free2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Medieval_tiles_free2.png
 
 #begin motw.png
 /importer:TextureImporter
@@ -59,6 +87,11 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:motw.png
+
+#begin objet.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:objet.tsx
 
 #begin tiles_12.png
 /importer:TextureImporter
