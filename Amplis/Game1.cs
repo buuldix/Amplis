@@ -28,15 +28,18 @@ namespace Amplis
         private bool _climbing;
         private AnimatedSprite _perso;
         //private OrthographicCamera _camera;
-        private TiledMap TiledMap { get; set; }
+        public TiledMap TiledMap { get; set; }
         private TiledMapTileLayer _mapLayer;
-        private TiledMapRenderer _tiledMapRenderer;
+        public TiledMapRenderer TiledMapRenderer { get; set; }
+        private readonly ScreenManager _screenManager;
         private Personnage p = new Personnage();
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            _screenManager = new ScreenManager();
+            Components.Add(_screenManager);
         }
 
         protected override void Initialize()
@@ -63,32 +66,10 @@ namespace Amplis
             _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
             //_graphics.ToggleFullScreen();
-            _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, this.TiledMap);
+            this.TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, this.TiledMap);
 
         }
-        private Vector2 GetMovementDirection()
-        {
-            var movementDirection = Vector2.Zero;
-            var state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Down))
-            {
-                movementDirection += Vector2.UnitY;
-                Console.WriteLine(Vector2.UnitY);
-            }
-            if (state.IsKeyDown(Keys.Up))
-            {
-                movementDirection -= Vector2.UnitY;
-            }
-            if (state.IsKeyDown(Keys.Left))
-            {
-                movementDirection -= Vector2.UnitX;
-            }
-            if (state.IsKeyDown(Keys.Right))
-            {
-                movementDirection += Vector2.UnitX;
-            }
-            return movementDirection;
-        }
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -96,7 +77,7 @@ namespace Amplis
             float deltaSecondes = (float)gameTime.ElapsedGameTime.TotalSeconds;
             string animation = p.Anim[p.Pers, 0];
             KeyboardState k = Keyboard.GetState();
-            const float movementSpeed = 200;
+            //const float movementSpeed = 200;
             //_camera.Move(GetMovementDirection() * movementSpeed * gameTime.GetElapsedSeconds());
 
             ushort tx = (ushort)(_persoPosition.X / this.TiledMap.TileWidth);
@@ -110,15 +91,17 @@ namespace Amplis
             ushort tyoverhead = (ushort)(_persoPosition.Y / this.TiledMap.TileHeight - 2);
 
 
-            if (IsCollision(tx, tychest, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Z)))
+            if (IsCollision(tx, tyfeet, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Z)))
                 _climbing = true;
             else
                 _climbing = false;
             if (_climbing)
             {
-                if (k.IsKeyDown(Keys.Z))
-                    _yVelocity = -5;
 
+                if (k.IsKeyDown(Keys.Up) || k.IsKeyDown(Keys.Z))
+                    _yVelocity = -5;
+                else if (k.IsKeyDown(Keys.S) && IsCollision(tx, ty, "Grimpe"))
+                    _yVelocity = 5;
             }
             else if (!_grounded&&!_climbing)
             {
@@ -149,7 +132,7 @@ namespace Amplis
                     
             }
 
-            if (k.IsKeyDown(Keys.D) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
+            if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && _persoPosition.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - _xVelocity)
             {
                 if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision")))
                 {
@@ -160,7 +143,7 @@ namespace Amplis
                 
             }
 
-            else if (k.IsKeyDown(Keys.Q) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
+            else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && _persoPosition.X - _perso.TextureRegion.Width / 2 > 0)
             {
                 if (!(IsCollision(txleft, tyfeet, "Collision") ||IsCollision(txleft,tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision")))
                 {
@@ -178,6 +161,9 @@ namespace Amplis
                 p.PersDelay -= deltaSecondes;
             else
                 p.PersDelay = 0;
+
+            if (k.IsKeyDown(Keys.J))
+                LoadScreen(1);
             _persoPosition.Y += _yVelocity;
             _perso.Play(animation);
             _perso.Update(deltaSecondes);
@@ -189,7 +175,7 @@ namespace Amplis
             //GraphicsDevice.Clear(Color.CornflowerBlue);
             //Matrix transformMatrix = _camera.GetViewMatrix();
             _spriteBatch.Begin(/*transformMatrix: transformMatrix*/);
-            _tiledMapRenderer.Draw();
+            this.TiledMapRenderer.Draw();
             _spriteBatch.Draw(_perso, _persoPosition);
             _spriteBatch.End();
             //base.Draw(gameTime);
@@ -203,6 +189,10 @@ namespace Amplis
             if (!tile.Value.IsBlank)
                 return true;
             return false;
+        }
+        private void LoadScreen(int scene)
+        {
+            _screenManager.LoadScreen(new Screen(this, scene), new FadeTransition(GraphicsDevice, Color.Black));
         }
     }
 }
