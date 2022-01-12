@@ -13,8 +13,8 @@ namespace Amplis
     {
         private Game1 _myGame; // pour récupérer le jeu en cours
         private int _map;
-        String[] scene = new String[] { "lvl1", "lvl2" };
-        Vector2[] spawn = new Vector2[] { new Vector2(100, 800), new Vector2(100, 650) };
+        String[] scene = new String[] { "map1", "map2", "mapBoss" };
+        Vector2[] spawn = new Vector2[] { new Vector2(100, 900), new Vector2(100, 150), new Vector2(100, 500) };
 
 
         public int Map { get => _map; set => _map = value; }

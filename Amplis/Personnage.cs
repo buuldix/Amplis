@@ -8,7 +8,7 @@ namespace Amplis
     public class Personnage
     {
 
-        private String[,] anim = new String[,] { { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } };
+        private String[,] anim;
         public const int NBPERS = 2;
         private double persDelay;
         private bool grounded;
@@ -18,8 +18,9 @@ namespace Amplis
         private bool climbing;
         private bool canGo;
         int pers;
-        public Personnage()
+        public Personnage(String[,] animation)
         {
+            anim = animation;
             Pers = 0;
             PersDelay = 0;
             Position = new Vector2(100, 500);

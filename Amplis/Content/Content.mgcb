@@ -45,6 +45,24 @@
 /processor:TiledMapTilesetProcessor
 /build:decors.tsx
 
+#begin dragon.sf
+/importer:SpriteFactoryContentImporter
+/processor:SpriteFactoryContentProcessor
+/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
+/build:dragon.sf
+
+#begin dragonn.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:dragonn.png
+
 #begin Jouer.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -79,15 +97,20 @@
 /processor:TiledMapTilesetProcessor
 /build:logo.tsx
 
-#begin lvl1.tmx
+#begin map1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:lvl1.tmx
+/build:map1.tmx
 
-#begin lvl2.tmx
+#begin map2.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:lvl2.tmx
+/build:map2.tmx
+
+#begin mapBoss.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:mapBoss.tmx
 
 #begin Medieval_props_free.png
 /importer:TextureImporter

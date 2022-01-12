@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
@@ -9,9 +8,7 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
-using MonoGame.Extended.ViewportAdapters;
 using System;
-using System.Windows;
 
 namespace Amplis
 {
@@ -20,10 +17,12 @@ namespace Amplis
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private Sprite boss;
+        private Personnage b;
         public Personnage p;
-        private AnimatedSprite _perso;
         public TiledMap TiledMap { get; set; }
         private TiledMapTileLayer _mapLayer;
+        private Sprite _perso;
         public TiledMapRenderer TiledMapRenderer { get; set; }
         private int _currentMap;
         private readonly ScreenManager _screenManager;
@@ -51,15 +50,13 @@ namespace Amplis
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            SpriteSheet spriteSheet = Content.Load<SpriteSheet>("motw.sf", new JsonContentLoader());
-            _perso = new AnimatedSprite(spriteSheet);
+            _perso = new Sprite(this, "motw.sf");
             TiledMap = Content.Load<TiledMap>("accueil");
             TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1072;
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
-            //_graphics.ToggleFullScreen();
             TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
 
         }
@@ -129,25 +126,30 @@ namespace Amplis
                     p.CanGo = true;
                 }
             }
-                if (!p.CanGo)
-                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = false;
-                else
-                {
-                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = true;
-                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ferme").IsVisible = false;
-                }
+            if (!p.CanGo)
+                TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = false;
+            else
+            {
+                TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = true;
+                TiledMap.GetLayer<TiledMapTileLayer>("Porte ferme").IsVisible = false;
+            }
 
             //collision porte
             if (IsCollision(tx, tyfeet, "Porte ouverte") && p.CanGo)
             {
                 _currentMap++;
+                    if (_currentMap == 2)
+                    {
+                        boss = new Sprite(this, "dragon.sf");
+                        b = new Personnage(new String[,] { { "face", "left", "right", "back" } });
+                        b.Position = p.Position;
+                    }
                 new FadeTransition(GraphicsDevice, Color.Black, 1);
                 LoadScreen(_currentMap);
             }
-                
 
-            //changement de personnage
-            if (k.IsKeyDown(Keys.J))
+                //changement de personnage
+                if (k.IsKeyDown(Keys.J))
             {
                 Console.WriteLine(p.PersDelay);
                 if (p.PersDelay == 0)
@@ -169,7 +171,7 @@ namespace Amplis
                 
 
             //déplacement vers la droite
-            if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && p.Position.X + _perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity)
+            if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && p.Position.X + _perso.Perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity)
             {
                 if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing))
                 {
@@ -179,7 +181,7 @@ namespace Amplis
                 
             }
             //déplacement vers la gauche
-            else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && p.Position.X - _perso.TextureRegion.Width / 2 > 0)
+            else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && p.Position.X - _perso.Perso.TextureRegion.Width / 2 > 0)
             {
                 if (!(IsCollision(txleft, tyfeet, "Collision") ||IsCollision(txleft,tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision")|| p.Climbing))
                 {
@@ -206,11 +208,19 @@ namespace Amplis
 
 
             if (k.IsKeyDown(Keys.L))
-                LoadScreen(_currentMap + 1);
+                {
+                    //boss = new Sprite(this, "dragon.sf");
+                    //b = new Personnage(new String[,] { { "face", "left", "right", "back" } });
+                    //b.Position = p.Position;
+                    _currentMap = 2;
+                    LoadScreen(_currentMap);
+                }
+
+                
 
             //animation du personnage
-            _perso.Play(animation);
-            _perso.Update(deltaSecondes);
+            _perso.Perso.Play(animation);
+            _perso.Perso.Update(deltaSecondes);
             }
             else if (state == State.Waiting)
             {
@@ -222,17 +232,14 @@ namespace Amplis
                     TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
                 if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
                 {
-                    p = new Personnage();
+                    p = new Personnage(new String[,] { { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } });
                     LoadScreen(_currentMap);
+                    IsMouseVisible = false;
 
 
                 }
                 else if (IsCollision(mx, my, "Quitter") && m.LeftButton == ButtonState.Pressed)
                     Exit();
-                /*if(m.LeftButton == ButtonState.Pressed)
-                {
-                    
-                }*/
             }
 
             base.Update(gameTime);
@@ -243,7 +250,9 @@ namespace Amplis
             _spriteBatch.Begin();
             this.TiledMapRenderer.Draw();
             if(state==State.Playing)
-                _spriteBatch.Draw(_perso, p.Position);
+                _spriteBatch.Draw(_perso.Perso, p.Position);
+            if (_currentMap == 2)
+                _spriteBatch.Draw(boss.Perso, b.Position);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
