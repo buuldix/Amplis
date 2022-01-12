@@ -19,10 +19,12 @@ namespace Amplis
         private SpriteBatch _spriteBatch;
         private Sprite boss;
         private Personnage b;
+        private Vector2 bossCharge;
         public Personnage p;
         public TiledMap TiledMap { get; set; }
         private TiledMapTileLayer _mapLayer;
         private Sprite _perso;
+        private bool _charge;
         public TiledMapRenderer TiledMapRenderer { get; set; }
         private int _currentMap;
         private readonly ScreenManager _screenManager;
@@ -84,7 +86,27 @@ namespace Amplis
             ushort tychest = (ushort)(p.Position.Y / TiledMap.TileHeight);
             ushort tyhead = (ushort)(p.Position.Y / TiledMap.TileHeight -1);
             ushort tyoverhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 2);
-
+            if(_currentMap == 2)
+                {
+                    if(_charge)
+                    {
+                        bossCharge = p.Position;
+                        _charge = false;
+                    }
+                    else
+                    {
+                        if (bossCharge == b.Position)
+                        {
+                            _charge = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine((b.X - bossCharge.X));
+                            b.X -= (b.X - bossCharge.X) / 2;
+                            b.Y -= (b.Y - bossCharge.Y) / 2;
+                        }
+                    }
+                }
             //gestion de l'escaslade des échelles
             if (IsCollision(tx, tyfeet, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Z) || k.IsKeyDown(Keys.Down) || k.IsKeyDown(Keys.Up)))
                 p.Climbing = true;
@@ -142,9 +164,9 @@ namespace Amplis
                     {
                         boss = new Sprite(this, "dragon.sf");
                         b = new Personnage(new String[,] { { "face", "left", "right", "back" } });
-                        b.Position = p.Position;
+                        b.Position = new Vector2(500,500);
+                        _charge = true;
                     }
-                new FadeTransition(GraphicsDevice, Color.Black, 1);
                 LoadScreen(_currentMap);
             }
 
@@ -209,11 +231,12 @@ namespace Amplis
 
             if (k.IsKeyDown(Keys.L))
                 {
-                    //boss = new Sprite(this, "dragon.sf");
-                    //b = new Personnage(new String[,] { { "face", "left", "right", "back" } });
-                    //b.Position = p.Position;
+                    boss = new Sprite(this, "dragon.sf");
+                    b = new Personnage(new String[,] { { "face", "left", "right", "back" } }/*{ { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } }*/);
+                    b.Position = new Vector2(500,500);
                     _currentMap = 2;
                     LoadScreen(_currentMap);
+                    _charge = true;
                 }
 
                 
@@ -248,7 +271,7 @@ namespace Amplis
         protected override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin();
-            this.TiledMapRenderer.Draw();
+            TiledMapRenderer.Draw();
             if(state==State.Playing)
                 _spriteBatch.Draw(_perso.Perso, p.Position);
             if (_currentMap == 2)

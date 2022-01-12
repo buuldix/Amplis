@@ -2,20 +2,20 @@
   "textureAtlas": {
     "texture": "dragonn.png",
     "regionWidth": 100,
-    "regionHeight": 69
+    "regionHeight": 70
   },
   "cycles": {
     "face": {
-      "frames": [0,1,2]
+      "frames": [ 0, 1, 2 ]
     },
     "left": {
-      "frames": [3,4,5]
+      "frames": [ 3, 4, 5 ]
     },
     "right": {
-      "frames": [6,7,8]
+      "frames": [ 6, 7, 8 ]
     },
     "back": {
-      "frames": [9,10,11]
+      "frames": [ 9, 10, 11 ]
     }
   }
 }
