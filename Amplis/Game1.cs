@@ -19,7 +19,11 @@ namespace Amplis
         private SpriteBatch _spriteBatch;
         private Sprite boss;
         private Personnage b;
+        private Rectangle rp;
+        private Rectangle rb;
         private Vector2 bossCharge;
+        private float bossChargeX;
+        private float bossChargeY;
         public Personnage p;
         public TiledMap TiledMap { get; set; }
         private TiledMapTileLayer _mapLayer;
@@ -88,24 +92,36 @@ namespace Amplis
             ushort tyoverhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 2);
             if(_currentMap == 2)
                 {
-                    if(_charge)
+                    if(_charge && b.CanGo)
                     {
                         bossCharge = p.Position;
+                        bossChargeX = (b.X - bossCharge.X) / 100;
+                        bossChargeY = (b.Y - bossCharge.Y) / 100;
                         _charge = false;
+                        b.CanGo = false;
                     }
-                    else
+                    else if(!_charge)
                     {
-                        if (bossCharge == b.Position)
+                        if (Math.Round(bossCharge.X,0) == Math.Round(b.X,0) && Math.Round(bossCharge.Y, 0) == Math.Round(b.Y, 0))
                         {
                             _charge = true;
                         }
                         else
                         {
-                            Console.WriteLine((b.X - bossCharge.X));
-                            b.X -= (b.X - bossCharge.X) / 2;
-                            b.Y -= (b.Y - bossCharge.Y) / 2;
+                            b.X -= bossChargeX;
+                            b.Y -= bossChargeY;
                         }
                     }
+                    else if(_charge && !b.CanGo)
+                    {
+                        bossCharge = new Vector2(960, 540);
+                        bossChargeX = (b.X - bossCharge.X) / 100;
+                        bossChargeY = (b.Y - bossCharge.Y) / 100;
+                        b.CanGo = true;
+                        _charge = false;
+
+                    }
+                    
                 }
             //gestion de l'escaslade des échelles
             if (IsCollision(tx, tyfeet, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Z) || k.IsKeyDown(Keys.Down) || k.IsKeyDown(Keys.Up)))
@@ -164,7 +180,7 @@ namespace Amplis
                     {
                         boss = new Sprite(this, "dragon.sf");
                         b = new Personnage(new String[,] { { "face", "left", "right", "back" } });
-                        b.Position = new Vector2(500,500);
+                        b.Position = new Vector2(960,540);
                         _charge = true;
                     }
                 LoadScreen(_currentMap);
@@ -184,10 +200,7 @@ namespace Amplis
             //détection de la mort
             if (IsCollision(tx, tyfeet, "Mort"))
             {
-                TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible = true;
-                p.CanGo = false;
-                
-                LoadScreen(_currentMap);
+                Mort();
             }
                 
                 
@@ -232,8 +245,8 @@ namespace Amplis
             if (k.IsKeyDown(Keys.L))
                 {
                     boss = new Sprite(this, "dragon.sf");
-                    b = new Personnage(new String[,] { { "face", "left", "right", "back" } }/*{ { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } }*/);
-                    b.Position = new Vector2(500,500);
+                    b = new Personnage(new String[,] { { "face", "left", "right", "back" } });
+                    b.Position = new Vector2(960,540);
                     _currentMap = 2;
                     LoadScreen(_currentMap);
                     _charge = true;
@@ -256,6 +269,7 @@ namespace Amplis
                 if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
                 {
                     p = new Personnage(new String[,] { { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } });
+                    //rp = new Rectangle(p.X,p.Y,p.Pers.)
                     LoadScreen(_currentMap);
                     IsMouseVisible = false;
 
@@ -292,6 +306,12 @@ namespace Amplis
         private void LoadScreen(int scene)
         {
             _screenManager.LoadScreen(new Screen(this, scene), new FadeTransition(GraphicsDevice, Color.Black,1));
+        }
+        private void Mort()
+        {
+            TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible = true;
+            p.CanGo = false;
+            LoadScreen(_currentMap);
         }
     }
 }
