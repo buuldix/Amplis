@@ -10,11 +10,11 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Content.Pipeline.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Graphics.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Tiled.dll
-/reference:P:\S1\R1_01_DEV\Monogame\dll\Newtonsoft.Json.dll
+/reference:C:\Users\Mathis\Desktop\monogame\dll\MonoGame.Extended.Content.Pipeline.dll
+/reference:C:\Users\Mathis\Desktop\monogame\dll\MonoGame.Extended.dll
+/reference:C:\Users\Mathis\Desktop\monogame\dll\MonoGame.Extended.Graphics.dll
+/reference:C:\Users\Mathis\Desktop\monogame\dll\MonoGame.Extended.Tiled.dll
+/reference:C:\Users\Mathis\Desktop\monogame\dll\Newtonsoft.Json.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -157,11 +157,6 @@
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
 /build:objet.tsx
-
-#begin P:/S1/R1_01_DEV/SAE/Medieval_tiles_free2.tsx
-/importer:TiledMapTilesetImporter
-/processor:TiledMapTilesetProcessor
-/build:P:/S1/R1_01_DEV/SAE/Medieval_tiles_free2.tsx;Medieval_tiles_free2.tsx
 
 #begin Quitter.png
 /importer:TextureImporter

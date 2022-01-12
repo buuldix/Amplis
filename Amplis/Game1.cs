@@ -165,7 +165,11 @@ namespace Amplis
                 }
             }
             if (!p.CanGo)
-                TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = false;
+                {
+                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = false;
+                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ferme").IsVisible = true;
+                }
+                
             else
             {
                 TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = true;
@@ -183,18 +187,18 @@ namespace Amplis
                         b.Position = new Vector2(960,540);
                         _charge = true;
                     }
+                    p.CanGo = false;
                 LoadScreen(_currentMap);
             }
 
-                //changement de personnage
-                if (k.IsKeyDown(Keys.J))
+            //changement de personnage
+            if (k.IsKeyDown(Keys.J))
             {
-                Console.WriteLine(p.PersDelay);
-                if (p.PersDelay == 0)
-                {
-                    p.ChangePers();
-                    p.PersDelay = 1;
-                }
+            if (p.PersDelay == 0)
+            {
+                p.ChangePers();
+                p.PersDelay = 1;
+            }
                     
             }
             //détection de la mort
@@ -208,7 +212,7 @@ namespace Amplis
             //déplacement vers la droite
             if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && p.Position.X + _perso.Perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity)
             {
-                if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing))
+                if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing) || IsCollision(txright, tyarm, "Grimpe"))
                 {
                     p.X += p.XVelocity;
                     animation = p.Anim[p.Pers, 3];
@@ -218,7 +222,7 @@ namespace Amplis
             //déplacement vers la gauche
             else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && p.Position.X - _perso.Perso.TextureRegion.Width / 2 > 0)
             {
-                if (!(IsCollision(txleft, tyfeet, "Collision") ||IsCollision(txleft,tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision")|| p.Climbing))
+                if (!(IsCollision(txleft, tyfeet, "Collision") ||IsCollision(txleft,tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision")|| p.Climbing) || IsCollision(txleft,tyarm,"Grimpe"))
                 {
                     p.X -= p.XVelocity;
                     animation = p.Anim[p.Pers, 2];
