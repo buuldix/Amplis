@@ -27,6 +27,8 @@ namespace Amplis
         public TiledMapRenderer TiledMapRenderer { get; set; }
         private int _currentMap;
         private readonly ScreenManager _screenManager;
+        public enum State { Waiting = 0, Playing = 1 };
+        private State state;
         
 
         public Game1()
@@ -40,8 +42,9 @@ namespace Amplis
 
         protected override void Initialize()
         {
-            p = new Personnage();
+            
             _currentMap = 0;
+            state = State.Waiting;
             base.Initialize();
         }
 
@@ -50,13 +53,14 @@ namespace Amplis
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             SpriteSheet spriteSheet = Content.Load<SpriteSheet>("motw.sf", new JsonContentLoader());
             _perso = new AnimatedSprite(spriteSheet);
-            this.TiledMap = Content.Load<TiledMap>("map");
-            _graphics.PreferredBackBufferWidth = 1020;
+            TiledMap = Content.Load<TiledMap>("accueil");
+            TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
+            _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1072;
-            _graphics.IsFullScreen = false;
+            _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             //_graphics.ToggleFullScreen();
-            this.TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, this.TiledMap);
+            TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
 
         }
 
@@ -65,20 +69,24 @@ namespace Amplis
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             float deltaSecondes = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            string animation = p.Anim[p.Pers, 0];
             KeyboardState k = Keyboard.GetState();
-            //const float movementSpeed = 200;
-            //_camera.Move(GetMovementDirection() * movementSpeed * gameTime.GetElapsedSeconds());
+            MouseState m = Mouse.GetState();
+            if (TiledMap.Name != "accueil")
+                state = State.Playing;
+            if (state == State.Playing)
+            {
+            string animation = p.Anim[p.Pers, 0];
 
-            ushort tx = (ushort)(p.Position.X / this.TiledMap.TileWidth);
-            ushort txright= (ushort)(p.Position.X / this.TiledMap.TileWidth+1);
-            ushort txleft = (ushort)(p.Position.X / this.TiledMap.TileWidth-1);
-            ushort ty = (ushort)(p.Position.Y / this.TiledMap.TileHeight + 3);
-            ushort tyfeet = (ushort)(p.Position.Y / this.TiledMap.TileHeight + 2);
-            ushort tyarm = (ushort)(p.Position.Y / this.TiledMap.TileHeight + 1);
-            ushort tychest = (ushort)(p.Position.Y / this.TiledMap.TileHeight);
-            ushort tyhead = (ushort)(p.Position.Y / this.TiledMap.TileHeight -1);
-            ushort tyoverhead = (ushort)(p.Position.Y / this.TiledMap.TileHeight - 2);
+
+            ushort tx = (ushort)(p.Position.X / TiledMap.TileWidth);
+            ushort txright= (ushort)(p.Position.X / TiledMap.TileWidth+1);
+            ushort txleft = (ushort)(p.Position.X / TiledMap.TileWidth-1);
+            ushort ty = (ushort)(p.Position.Y / TiledMap.TileHeight + 3);
+            ushort tyfeet = (ushort)(p.Position.Y / TiledMap.TileHeight + 2);
+            ushort tyarm = (ushort)(p.Position.Y / TiledMap.TileHeight + 1);
+            ushort tychest = (ushort)(p.Position.Y / TiledMap.TileHeight);
+            ushort tyhead = (ushort)(p.Position.Y / TiledMap.TileHeight -1);
+            ushort tyoverhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 2);
 
             //gestion de l'escaslade des échelles
             if (IsCollision(tx, tyfeet, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Z) || k.IsKeyDown(Keys.Down) || k.IsKeyDown(Keys.Up)))
@@ -121,9 +129,16 @@ namespace Amplis
                     p.CanGo = true;
                 }
             }
+                if (!p.CanGo)
+                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = false;
+                else
+                {
+                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = true;
+                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ferme").IsVisible = false;
+                }
 
             //collision porte
-            if (IsCollision(tx, tyfeet, "Porte") && p.CanGo == true)
+            if (IsCollision(tx, tyfeet, "Porte ouverte") && p.CanGo)
             {
                 _currentMap++;
                 new FadeTransition(GraphicsDevice, Color.Black, 1);
@@ -192,9 +207,34 @@ namespace Amplis
 
             if (k.IsKeyDown(Keys.L))
                 LoadScreen(_currentMap + 1);
+
             //animation du personnage
             _perso.Play(animation);
             _perso.Update(deltaSecondes);
+            }
+            else if (state == State.Waiting)
+            {
+                ushort mx = (ushort)(m.X / TiledMap.TileWidth);
+                ushort my = (ushort)(m.Y / TiledMap.TileHeight);
+                if (k.IsKeyDown(Keys.Up) && k.IsKeyDown(Keys.Down))
+                    TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = true;
+                if(k.IsKeyDown(Keys.Right)&&k.IsKeyDown(Keys.Left))
+                    TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
+                if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
+                {
+                    p = new Personnage();
+                    LoadScreen(_currentMap);
+
+
+                }
+                else if (IsCollision(mx, my, "Quitter") && m.LeftButton == ButtonState.Pressed)
+                    Exit();
+                /*if(m.LeftButton == ButtonState.Pressed)
+                {
+                    
+                }*/
+            }
+
             base.Update(gameTime);
         }
 
@@ -202,14 +242,15 @@ namespace Amplis
         {
             _spriteBatch.Begin();
             this.TiledMapRenderer.Draw();
-            _spriteBatch.Draw(_perso, p.Position);
+            if(state==State.Playing)
+                _spriteBatch.Draw(_perso, p.Position);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
         private bool IsCollision(ushort x, ushort y,String layer)
         {
             TiledMapTile? tile;
-            _mapLayer = this.TiledMap.GetLayer<TiledMapTileLayer>(layer);
+            _mapLayer = TiledMap.GetLayer<TiledMapTileLayer>(layer);
             if (_mapLayer.TryGetTile(x, y, out tile) == false)
                 return false;
             if (!tile.Value.IsBlank)

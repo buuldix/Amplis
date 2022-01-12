@@ -18,19 +18,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin _Spritesheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:_Spritesheet.png
+#begin accueil.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:accueil.tmx
 
-#begin Background.png
+#begin Amplis.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -40,22 +33,61 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Background.png
+/build:Amplis.png
+
+#begin Amplis.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Amplis.tsx
 
 #begin decors.tsx
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
 /build:decors.tsx
 
+#begin Jouer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Jouer.png
+
+#begin Jouer.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Jouer.tsx
+
+#begin logo.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:logo.png
+
+#begin logo.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:logo.tsx
+
+#begin lvl1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:lvl1.tmx
+
 #begin lvl2.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:lvl2.tmx
-
-#begin map.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:map.tmx
 
 #begin Medieval_props_free.png
 /importer:TextureImporter
@@ -81,6 +113,11 @@
 /processorParam:TextureFormat=Color
 /build:Medieval_tiles_free2.png
 
+#begin Medieval_tiles_free2.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Medieval_tiles_free2.tsx
+
 #begin motw.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -98,7 +135,12 @@
 /processor:TiledMapTilesetProcessor
 /build:objet.tsx
 
-#begin tiles_12.png
+#begin P:/S1/R1_01_DEV/SAE/Medieval_tiles_free2.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:P:/S1/R1_01_DEV/SAE/Medieval_tiles_free2.tsx;Medieval_tiles_free2.tsx
+
+#begin Quitter.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -108,5 +150,10 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:tiles_12.png
+/build:Quitter.png
+
+#begin Quitter.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Quitter.tsx
 
