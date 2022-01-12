@@ -27,6 +27,7 @@ namespace Amplis
         public TiledMapRenderer TiledMapRenderer { get; set; }
         private int _currentMap;
         private readonly ScreenManager _screenManager;
+        
 
         public Game1()
         {
@@ -50,9 +51,9 @@ namespace Amplis
             SpriteSheet spriteSheet = Content.Load<SpriteSheet>("motw.sf", new JsonContentLoader());
             _perso = new AnimatedSprite(spriteSheet);
             this.TiledMap = Content.Load<TiledMap>("map");
-            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferWidth = 1020;
             _graphics.PreferredBackBufferHeight = 1072;
-            _graphics.IsFullScreen = true;
+            _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
             //_graphics.ToggleFullScreen();
             this.TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, this.TiledMap);
@@ -173,7 +174,7 @@ namespace Amplis
             }
 
             //détection de collision avec le sol
-            if (!IsCollision(tx, ty, "Collision"))
+            if (!IsCollision(tx, ty, "Collision")||IsCollision(tx,ty,"Grimpe"))
                 p.Grounded = false;
 
             else
