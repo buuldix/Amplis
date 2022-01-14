@@ -10,11 +10,11 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:dll\MonoGame.Extended.Content.Pipeline.dll
-/reference:dll\MonoGame.Extended.dll
-/reference:dll\MonoGame.Extended.Graphics.dll
-/reference:dll\MonoGame.Extended.Tiled.dll
-/reference:dll\Newtonsoft.Json.dll
+/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Content.Pipeline.dll
+/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.dll
+/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Graphics.dll
+/reference:P:\S1\R1_01_DEV\Monogame\dll\MonoGame.Extended.Tiled.dll
+/reference:P:\S1\R1_01_DEV\Monogame\dll\Newtonsoft.Json.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -22,23 +22,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:accueil.tmx
-
-#begin Amplis.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Amplis.png
-
-#begin Amplis.tsx
-/importer:TiledMapTilesetImporter
-/processor:TiledMapTilesetProcessor
-/build:Amplis.tsx
 
 #begin decors.tsx
 /importer:TiledMapTilesetImporter
@@ -68,7 +51,13 @@
 /processorParam:TextureFormat=Color
 /build:dragonn.png
 
-#begin Jouer.png
+#begin fireball.sf
+/importer:SpriteFactoryContentImporter
+/processor:SpriteFactoryContentProcessor
+/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
+/build:fireball.sf
+
+#begin fireball_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -78,12 +67,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Jouer.png
-
-#begin Jouer.tsx
-/importer:TiledMapTilesetImporter
-/processor:TiledMapTilesetProcessor
-/build:Jouer.tsx
+/build:fireball_0.png
 
 #begin logo.png
 /importer:TextureImporter
@@ -126,11 +110,6 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:mapBoss.tmx
-
-#begin mapBossM2.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:mapBossM2.tmx
 
 #begin Medieval_props_free.png
 /importer:TextureImporter
@@ -206,21 +185,4 @@
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
 /build:objetM2.tsx
-
-#begin Quitter.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Quitter.png
-
-#begin Quitter.tsx
-/importer:TiledMapTilesetImporter
-/processor:TiledMapTilesetProcessor
-/build:Quitter.tsx
 
