@@ -64,6 +64,8 @@ namespace Amplis
         {
             RecupData(out _nbMort, out _currentMap);
             _positionTexteNbMort = new Vector2(1920 / 2 - 2, 1072 - 50);
+            if (!File.Exists("Stats.txt"))
+                ResData();
 
             state = State.Waiting;
             base.Initialize();
