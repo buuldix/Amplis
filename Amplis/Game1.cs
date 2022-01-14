@@ -194,7 +194,7 @@ namespace Amplis
                 if (k.IsKeyDown(Keys.Space) && p.Grounded)
                 {
                     p.XVelocity = 4;
-                    if (!IsCollision(tx, tyoverhead, "Collision"))
+                    if (!IsCollision(tx, tyoverhead, "Collision") && !IsCollision(tx, tyoverhead, "Seum"))
                         p.YVelocity = -13;
                 }
 
@@ -259,66 +259,34 @@ namespace Amplis
                 //déplacement vers la droite
                 if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && p.Position.X + _perso.Perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity)
                 {
-                    if (_currentMap == 3 && TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
+
+                    if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing || IsCollision(txright, tyfeet, "Seum") || IsCollision(txright, tyhead, "Seum") || IsCollision(txright, tychest, "Seum") || IsCollision(txright, tyarm, "Seum")) || IsCollision(txright, tyarm, "Grimpe"))
                     {
-                        if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing || IsCollision(txright, tyfeet, "Seum") || IsCollision(txright, tyhead, "Seum") || IsCollision(txright, tychest, "Seum") || IsCollision(txright, tyarm, "Seum")) || IsCollision(txright, tyarm, "Grimpe"))
-                        {
-                            p.X += p.XVelocity;
-                            animation = p.Anim[p.Pers, 2];
-                        }
+                        p.X += p.XVelocity;
+                        animation = p.Anim[p.Pers, 3];
                     }
-                    else
-                    {
-                        if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing) || IsCollision(txright, tyarm, "Grimpe"))
-                        {
-                            p.X += p.XVelocity;
-                            animation = p.Anim[p.Pers, 3];
-                        }
-                    }
+
                 }
                 //déplacement vers la gauche
                 else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && p.Position.X - _perso.Perso.TextureRegion.Width / 2 > 0)
                 {
-                    if (_currentMap == 3 && TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
+
+                    if (!(IsCollision(txleft, tyfeet, "Collision") || IsCollision(txleft, tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision") || p.Climbing || IsCollision(txleft, tyfeet, "Seum") || IsCollision(txleft, tyhead, "Seum") || IsCollision(txleft, tychest, "Seum") || IsCollision(txleft, tyarm, "Seum")) || IsCollision(txleft, tyarm, "Grimpe"))
                     {
-                        if (!(IsCollision(txleft, tyfeet, "Collision") || IsCollision(txleft, tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision") || p.Climbing || IsCollision(txleft, tyfeet, "Seum") || IsCollision(txleft, tyhead, "Seum") || IsCollision(txleft, tychest, "Seum") || IsCollision(txleft, tyarm, "Seum")) || IsCollision(txleft, tyarm, "Grimpe"))
-                        {
-                            p.X -= p.XVelocity;
-                            animation = p.Anim[p.Pers, 2];
-                        }
+                        p.X -= p.XVelocity;
+                        animation = p.Anim[p.Pers, 2];
                     }
-                    else
-                    {
-                        if (!(IsCollision(txleft, tyfeet, "Collision") || IsCollision(txleft, tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision") || p.Climbing) || IsCollision(txleft, tyarm, "Grimpe"))
-                        {
-                            p.X -= p.XVelocity;
-                            animation = p.Anim[p.Pers, 2];
-                        }
-                    }
+
 
                 }
 
                 //détection de collision avec le sol
-                if (_currentMap == 3 && TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
-                {
-                    if ((!IsCollision(tx, ty, "Collision") && !IsCollision(tx, ty, "Seum")) || IsCollision(tx, ty, "Grimpe"))
-                        p.Grounded = false;
 
-                    else
-                        p.Grounded = true;
-                }
-
-
+                if ((!IsCollision(tx, ty, "Collision") && !IsCollision(tx, ty, "Seum")) || IsCollision(tx, ty, "Grimpe"))
+                    p.Grounded = false;
 
                 else
-                {
-                    if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe"))
-                        p.Grounded = false;
-
-                    else
-                        p.Grounded = true;
-                }
-
+                    p.Grounded = true;
 
                 //vérification de la possibilité de changer de personnage
                 if (p.PersDelay > 0)
