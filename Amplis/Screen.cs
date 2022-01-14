@@ -34,7 +34,7 @@ namespace Amplis
         }
         public override void Update(GameTime gameTime)
         {
-            if(Map == 3)
+            if(Map == 3 && !_myGame.p.CanGo)
             {
                 _myGame.TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible = false;
                 _myGame.TiledMap.GetLayer<TiledMapTileLayer>("Decor").IsVisible = false;
