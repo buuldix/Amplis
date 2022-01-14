@@ -263,7 +263,7 @@ namespace Amplis
                     {
                         if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing || IsCollision(txright, tyfeet, "Seum") || IsCollision(txright, tyhead, "Seum") || IsCollision(txright, tychest, "Seum") || IsCollision(txright, tyarm, "Seum")) || IsCollision(txright, tyarm, "Grimpe"))
                         {
-                            p.X -= p.XVelocity;
+                            p.X += p.XVelocity;
                             animation = p.Anim[p.Pers, 2];
                         }
                     }
