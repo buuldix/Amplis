@@ -13,8 +13,8 @@ namespace Amplis
     {
         private Game1 _myGame; // pour récupérer le jeu en cours
         private int _map;
-        String[] scene = new String[] { "map1", "map2", "mapBoss" , "Map1M2", "Map2M2" };
-        Vector2[] spawn = new Vector2[] { new Vector2(100, 900), new Vector2(100, 150), new Vector2(100, 500),new Vector2(100,500), new Vector2(100, 900) };
+        String[] scene = new String[] { "map1", "map2", "mapBoss" , "Map1M2", "Map2M2","LastMap" };
+        Vector2[] spawn = new Vector2[] { new Vector2(100, 900), new Vector2(100, 150), new Vector2(100, 500),new Vector2(100,900), new Vector2(100, 200),new Vector2(100,200) };
 
 
         public int Map { get => _map; set => _map = value; }
@@ -34,6 +34,13 @@ namespace Amplis
         }
         public override void Update(GameTime gameTime)
         {
+            if(Map == 3)
+            {
+                _myGame.TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible = false;
+                _myGame.TiledMap.GetLayer<TiledMapTileLayer>("Decor").IsVisible = false;
+                _myGame.TiledMap.GetLayer<TiledMapTileLayer>("Grimpe").IsVisible = false;
+                _myGame.TiledMap.GetLayer<TiledMapTileLayer>("Mort").IsVisible = false;
+            }
         }
 
 
