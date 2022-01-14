@@ -42,7 +42,7 @@ namespace Amplis
         private readonly ScreenManager _screenManager;
         public enum State { Waiting = 0, Playing = 1 };
         private State state;
-        
+
 
         public Game1()
         {
@@ -55,7 +55,7 @@ namespace Amplis
 
         protected override void Initialize()
         {
-            
+
             _currentMap = 0;
             state = State.Waiting;
             base.Initialize();
@@ -86,21 +86,21 @@ namespace Amplis
                 state = State.Playing;
             if (state == State.Playing)
             {
-            string animation = p.Anim[p.Pers, 0];
+                string animation = p.Anim[p.Pers, 0];
 
 
-            ushort tx = (ushort)(p.Position.X / TiledMap.TileWidth);
-            ushort txright= (ushort)(p.Position.X / TiledMap.TileWidth+1);
-            ushort txleft = (ushort)(p.Position.X / TiledMap.TileWidth-1);
-            ushort ty = (ushort)(p.Position.Y / TiledMap.TileHeight + 3);
-            ushort tyfeet = (ushort)(p.Position.Y / TiledMap.TileHeight + 2);
-            ushort tyarm = (ushort)(p.Position.Y / TiledMap.TileHeight + 1);
-            ushort tychest = (ushort)(p.Position.Y / TiledMap.TileHeight);
-            ushort tyhead = (ushort)(p.Position.Y / TiledMap.TileHeight -1);
-            ushort tyoverhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 2);
-            if(_currentMap == 2)
+                ushort tx = (ushort)(p.Position.X / TiledMap.TileWidth);
+                ushort txright = (ushort)(p.Position.X / TiledMap.TileWidth + 1);
+                ushort txleft = (ushort)(p.Position.X / TiledMap.TileWidth - 1);
+                ushort ty = (ushort)(p.Position.Y / TiledMap.TileHeight + 3);
+                ushort tyfeet = (ushort)(p.Position.Y / TiledMap.TileHeight + 2);
+                ushort tyarm = (ushort)(p.Position.Y / TiledMap.TileHeight + 1);
+                ushort tychest = (ushort)(p.Position.Y / TiledMap.TileHeight);
+                ushort tyhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 1);
+                ushort tyoverhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 2);
+                if (_currentMap == 2)
                 {
-                    if(_charge && f.CanGo)
+                    if (_charge && f.CanGo)
                     {
                         bossCharge = p.Position;
                         bossChargeX = (f.X - bossCharge.X) / 100;
@@ -109,9 +109,9 @@ namespace Amplis
                         f.CanGo = false;
                         banimation = Animation(bossCharge, f.Position);
                     }
-                    else if(!_charge)
+                    else if (!_charge)
                     {
-                        if (Math.Round(bossCharge.X,0) == Math.Round(f.X,0) && Math.Round(bossCharge.Y, 0) == Math.Round(f.Y, 0))
+                        if (Math.Round(bossCharge.X, 0) == Math.Round(f.X, 0) && Math.Round(bossCharge.Y, 0) == Math.Round(f.Y, 0))
                         {
                             _charge = true;
                         }
@@ -121,7 +121,7 @@ namespace Amplis
                             f.Y -= bossChargeY;
                         }
                     }
-                    else if(_charge && !f.CanGo)
+                    else if (_charge && !f.CanGo)
                     {
                         bossCharge = new Vector2(960, 540);
                         bossChargeX = (f.X - bossCharge.X) / 100;
@@ -166,99 +166,99 @@ namespace Amplis
                     bdf.Perso.Update(deltaSecondes);
 
                 }
-            //gestion de l'escaslade des échelles
-            if (IsCollision(tx, tyfeet, "Grimpe") &&(k.IsKeyDown(Keys.S)||k.IsKeyDown(Keys.Z) || k.IsKeyDown(Keys.Down) || k.IsKeyDown(Keys.Up)) && TiledMap.GetLayer<TiledMapTileLayer>("Grimpe").IsVisible)
-                p.Climbing = true;
-            else
-                p.Climbing = false;
-            if (p.Climbing)
-            {
-
-                if (k.IsKeyDown(Keys.Up) || k.IsKeyDown(Keys.Z))
-                    p.YVelocity = -5;
-                else if ((k.IsKeyDown(Keys.S) || k.IsKeyDown(Keys.Down)) && IsCollision(tx, ty, "Grimpe"))
-                    p.YVelocity = 5;
-            }
-            else if (!p. Grounded&&!p.Climbing)
-            {
-                if (p.YVelocity < 8)
-                    p.YVelocity += 1;
-                if (p.YVelocity < 0 && IsCollision(tx, tyoverhead, "Collision"))
-                    p.YVelocity = 0;
-            }
-            else
-                p.YVelocity = 0;
-
-
-            //saut
-            if (k.IsKeyDown(Keys.Space)&&p.Grounded)
-            {
-                p.XVelocity=4;
-                if (!IsCollision(tx,tyoverhead, "Collision"))
-                    p.YVelocity = -13;
-            }
-            
-            //collision objet à récupérer
-            if(IsCollision(txleft,tyfeet, "Objet")|| IsCollision(tx, tyfeet, "Objet")|| IsCollision(txright, tyfeet, "Objet"))
-            {
-                if (k.IsKeyDown(Keys.R))
+                //gestion de l'escaslade des échelles
+                if (IsCollision(tx, tyfeet, "Grimpe") && (k.IsKeyDown(Keys.S) || k.IsKeyDown(Keys.Z) || k.IsKeyDown(Keys.Down) || k.IsKeyDown(Keys.Up)) && TiledMap.GetLayer<TiledMapTileLayer>("Grimpe").IsVisible)
+                    p.Climbing = true;
+                else
+                    p.Climbing = false;
+                if (p.Climbing)
                 {
-                    TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible = false;
-                    p.CanGo = true;
-                    if(_currentMap == 3)
+
+                    if (k.IsKeyDown(Keys.Up) || k.IsKeyDown(Keys.Z))
+                        p.YVelocity = -5;
+                    else if ((k.IsKeyDown(Keys.S) || k.IsKeyDown(Keys.Down)) && IsCollision(tx, ty, "Grimpe"))
+                        p.YVelocity = 5;
+                }
+                else if (!p.Grounded && !p.Climbing)
+                {
+                    if (p.YVelocity < 8)
+                        p.YVelocity += 1;
+                    if (p.YVelocity < 0 && IsCollision(tx, tyoverhead, "Collision"))
+                        p.YVelocity = 0;
+                }
+                else
+                    p.YVelocity = 0;
+
+
+                //saut
+                if (k.IsKeyDown(Keys.Space) && p.Grounded)
+                {
+                    p.XVelocity = 4;
+                    if (!IsCollision(tx, tyoverhead, "Collision"))
+                        p.YVelocity = -13;
+                }
+
+                //collision objet à récupérer
+                if (IsCollision(txleft, tyfeet, "Objet") || IsCollision(tx, tyfeet, "Objet") || IsCollision(txright, tyfeet, "Objet"))
+                {
+                    if (k.IsKeyDown(Keys.R))
+                    {
+                        TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible = false;
+                        p.CanGo = true;
+                        if (_currentMap == 3)
                         {
                             TiledMap.GetLayer<TiledMapTileLayer>("Mort").IsVisible = true;
                             TiledMap.GetLayer<TiledMapTileLayer>("Grimpe").IsVisible = true;
                             TiledMap.GetLayer<TiledMapTileLayer>("Decor").IsVisible = true;
                             TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible = true;
                         }
+                    }
                 }
-            }
-            if (!p.CanGo)
+                if (!p.CanGo)
                 {
                     TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = false;
                     TiledMap.GetLayer<TiledMapTileLayer>("Porte ferme").IsVisible = true;
                 }
-                
-            else
-            {
-                TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = true;
-                TiledMap.GetLayer<TiledMapTileLayer>("Porte ferme").IsVisible = false;
-            }
 
-            //collision porte
-            if (IsCollision(tx, tyfeet, "Porte ouverte") && p.CanGo)
-            {
-                _currentMap++;
+                else
+                {
+                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ouverte").IsVisible = true;
+                    TiledMap.GetLayer<TiledMapTileLayer>("Porte ferme").IsVisible = false;
+                }
+
+                //collision porte
+                if (IsCollision(tx, tyfeet, "Porte ouverte") && p.CanGo)
+                {
+                    _currentMap++;
                     if (_currentMap == 2)
                     {
                         bdf = new Sprite(this, "fireball.sf");
                         f = new Personnage(new String[,] { { "left", "topleft", "top", "topright", "right", "botright", "bot", "botleft" } });
-                        f.Position = new Vector2(960,540);
+                        f.Position = new Vector2(960, 540);
                         _charge = true;
                         rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
-                        rpprojectil = new Rectangle((int)p.X-20, (int)p.Y-20, PWIDTH+40, PHEIGHT+40);
+                        rpprojectil = new Rectangle((int)p.X - 20, (int)p.Y - 20, PWIDTH + 40, PHEIGHT + 40);
                         rb = new Rectangle((int)f.X, (int)f.Y, BWIDTH, BHEIGHT);
                         p.ChangePers();
                     }
                     p.CanGo = false;
-                LoadScreen(_currentMap);
-            }
+                    LoadScreen(_currentMap);
+                }
 
-           
-                    
-            
-            //détection de la mort
-            if (IsCollision(tx, tyfeet, "Mort") && TiledMap.GetLayer<TiledMapTileLayer>("Mort").IsVisible)
-            {
-                Mort();
-            }
-                
-                
 
-            //déplacement vers la droite
-            if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && p.Position.X + _perso.Perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity)
-            {
+
+
+                //détection de la mort
+                if (IsCollision(tx, tyfeet, "Mort") && TiledMap.GetLayer<TiledMapTileLayer>("Mort").IsVisible)
+                {
+                    Mort();
+                }
+
+
+
+                //déplacement vers la droite
+                if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && p.Position.X + _perso.Perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity)
+                {
                     if (_currentMap == 3 && TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                     {
                         if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing || IsCollision(txright, tyfeet, "Seum") || IsCollision(txright, tyhead, "Seum") || IsCollision(txright, tychest, "Seum") || IsCollision(txright, tyarm, "Seum")) || IsCollision(txright, tyarm, "Grimpe"))
@@ -275,74 +275,98 @@ namespace Amplis
                             animation = p.Anim[p.Pers, 3];
                         }
                     }
-            }
-            //déplacement vers la gauche
-            else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && p.Position.X - _perso.Perso.TextureRegion.Width / 2 > 0)
-            {
-                if(_currentMap == 3 && TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
+                }
+                //déplacement vers la gauche
+                else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && p.Position.X - _perso.Perso.TextureRegion.Width / 2 > 0)
                 {
-                    if (!(IsCollision(txleft, tyfeet, "Collision") || IsCollision(txleft, tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision") || p.Climbing || IsCollision(txleft, tyfeet, "Seum") || IsCollision(txleft, tyhead, "Seum") || IsCollision(txleft, tychest, "Seum") || IsCollision(txleft, tyarm, "Seum")) || IsCollision(txleft, tyarm, "Grimpe"))
+                    if (_currentMap == 3 && TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
+                    {
+                        if (!(IsCollision(txleft, tyfeet, "Collision") || IsCollision(txleft, tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision") || p.Climbing || IsCollision(txleft, tyfeet, "Seum") || IsCollision(txleft, tyhead, "Seum") || IsCollision(txleft, tychest, "Seum") || IsCollision(txleft, tyarm, "Seum")) || IsCollision(txleft, tyarm, "Grimpe"))
                         {
                             p.X -= p.XVelocity;
                             animation = p.Anim[p.Pers, 2];
                         }
+                    }
+                    else
+                    {
+                        if (!(IsCollision(txleft, tyfeet, "Collision") || IsCollision(txleft, tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision") || p.Climbing) || IsCollision(txleft, tyarm, "Grimpe"))
+                        {
+                            p.X -= p.XVelocity;
+                            animation = p.Anim[p.Pers, 2];
+                        }
+                    }
+
+                }
+
+                //détection de collision avec le sol
+                if (_currentMap == 3)
+                {
+                    if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
+                    {
+                        if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe") || !IsCollision(tx, ty, "Seum"))
+                            p.Grounded = false;
+
+                        else
+                            p.Grounded = true;
+                    }
+                    else
+                    {
+                        if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe"))
+                            p.Grounded = false;
+
+                        else
+                            p.Grounded = true;
+                    }
+
                 }
                 else
                 {
-                    if (!(IsCollision(txleft, tyfeet, "Collision") ||IsCollision(txleft,tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision")|| p.Climbing) || IsCollision(txleft,tyarm,"Grimpe"))
-                        {
-                            p.X -= p.XVelocity;
-                            animation = p.Anim[p.Pers, 2];
-                        }
+                    if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe"))
+                        p.Grounded = false;
+
+                    else
+                        p.Grounded = true;
                 }
-                
-            }
 
-            //détection de collision avec le sol
-            if (!IsCollision(tx, ty, "Collision")||IsCollision(tx,ty,"Grimpe"))
-                p.Grounded = false;
 
-            else
-                p.Grounded = true;
-            
-            //vérification de la possibilité de changer de personnage
-            if (p.PersDelay > 0)
-                p.PersDelay -= deltaSecondes;
-                else if(p.PersDelay<0)
+                //vérification de la possibilité de changer de personnage
+                if (p.PersDelay > 0)
+                    p.PersDelay -= deltaSecondes;
+                else if (p.PersDelay < 0)
                 {
                     p.PersDelay = 0;
                     p.ChangePers();
                 }
-                
-
-            //gravité
-            p.Y += p.YVelocity;
 
 
-            if (k.IsKeyDown(Keys.L))
-            {
-                bdf = new Sprite(this, "fireball.sf");
-                f = new Personnage(new String[,] { { "left","topleft","top","topright","right","botright","bot","botleft"} } /*{ { "face", "left", "right", "back" } }*/);
-                f.Position = new Vector2(960,540);
-                _charge = true;
-                rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
-                rb = new Rectangle((int)f.X, (int)f.Y, BWIDTH, BHEIGHT);
-                rpprojectil = new Rectangle((int)p.X - 20, (int)p.Y - 20, PWIDTH + 40, PHEIGHT + 40);
-                p.Pers = 1;
-                _currentMap = 2;
-                banimation = "left";
-                LoadScreen(_currentMap);                    
-            }
-            if (k.IsKeyDown(Keys.M))
-            {
-                _currentMap = 3;
-                LoadScreen(_currentMap);
-            }
+                //gravité
+                p.Y += p.YVelocity;
 
-            //animation du personnage
-            _perso.Perso.Play(animation);
-            _perso.Perso.Update(deltaSecondes);
-            
+
+                if (k.IsKeyDown(Keys.L))
+                {
+                    bdf = new Sprite(this, "fireball.sf");
+                    f = new Personnage(new String[,] { { "left", "topleft", "top", "topright", "right", "botright", "bot", "botleft" } } /*{ { "face", "left", "right", "back" } }*/);
+                    f.Position = new Vector2(960, 540);
+                    _charge = true;
+                    rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
+                    rb = new Rectangle((int)f.X, (int)f.Y, BWIDTH, BHEIGHT);
+                    rpprojectil = new Rectangle((int)p.X - 20, (int)p.Y - 20, PWIDTH + 40, PHEIGHT + 40);
+                    p.Pers = 1;
+                    _currentMap = 2;
+                    banimation = "left";
+                    LoadScreen(_currentMap);
+                }
+                if (k.IsKeyDown(Keys.M))
+                {
+                    _currentMap = 3;
+                    LoadScreen(_currentMap);
+                }
+
+                //animation du personnage
+                _perso.Perso.Play(animation);
+                _perso.Perso.Update(deltaSecondes);
+
             }
             else if (state == State.Waiting)
             {
@@ -350,7 +374,7 @@ namespace Amplis
                 ushort my = (ushort)(m.Y / TiledMap.TileHeight);
                 if (k.IsKeyDown(Keys.Up) && k.IsKeyDown(Keys.Down))
                     TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = true;
-                if(k.IsKeyDown(Keys.Right)&&k.IsKeyDown(Keys.Left))
+                if (k.IsKeyDown(Keys.Right) && k.IsKeyDown(Keys.Left))
                     TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
                 if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
                 {
@@ -371,15 +395,15 @@ namespace Amplis
         {
             _spriteBatch.Begin();
             TiledMapRenderer.Draw();
-            if(state==State.Playing)
+            if (state == State.Playing)
                 _spriteBatch.Draw(_perso.Perso, p.Position);
 
             if (_currentMap == 2)
-                _spriteBatch.Draw(bdf.Perso, f.Position);                
+                _spriteBatch.Draw(bdf.Perso, f.Position);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
-        private bool IsCollision(ushort x, ushort y,String layer)
+        private bool IsCollision(ushort x, ushort y, String layer)
         {
             TiledMapTile? tile;
             _mapLayer = TiledMap.GetLayer<TiledMapTileLayer>(layer);
@@ -391,7 +415,7 @@ namespace Amplis
         }
         private void LoadScreen(int scene)
         {
-            _screenManager.LoadScreen(new Screen(this, scene), new FadeTransition(GraphicsDevice, Color.Black,1));
+            _screenManager.LoadScreen(new Screen(this, scene), new FadeTransition(GraphicsDevice, Color.Black, 1));
         }
         private void Mort()
         {
@@ -400,18 +424,18 @@ namespace Amplis
             LoadScreen(_currentMap);
             p.YVelocity = 0;
         }
-        private String Animation(Vector2 objectif,Vector2 position)
+        private String Animation(Vector2 objectif, Vector2 position)
         {
             float diffX = objectif.X - position.X;
             float diffY = objectif.Y - position.Y;
-            if (diffX>400 || diffX < -400)
+            if (diffX > 400 || diffX < -400)
             {
                 if (diffX <= 0)
-                    return  "left";
+                    return "left";
                 else
-                    return  "right";
+                    return "right";
             }
-            else if(diffX > 200 || diffX < -200)
+            else if (diffX > 200 || diffX < -200)
             {
                 if (diffY <= 0)
                 {
@@ -422,12 +446,12 @@ namespace Amplis
                 }
                 else
                 {
-                    if(diffX <= 0)
+                    if (diffX <= 0)
                         return "botleft";
                     else
                         return "botright";
                 }
-                    
+
             }
             else
             {
@@ -438,5 +462,5 @@ namespace Amplis
 
             }
         }
-    }   
+    }
 }
