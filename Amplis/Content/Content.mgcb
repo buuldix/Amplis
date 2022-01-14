@@ -69,6 +69,11 @@
 /processorParam:TextureFormat=Color
 /build:fireball_0.png
 
+#begin Lastmap.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Lastmap.tmx
+
 #begin logo.png
 /importer:TextureImporter
 /processor:TextureProcessor
