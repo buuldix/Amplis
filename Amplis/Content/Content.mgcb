@@ -45,6 +45,11 @@
 /processor:TiledMapTilesetProcessor
 /build:decors.tsx
 
+#begin decorsM2.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:decorsM2.tsx
+
 #begin dragon.sf
 /importer:SpriteFactoryContentImporter
 /processor:SpriteFactoryContentProcessor
@@ -102,15 +107,30 @@
 /processor:TiledMapProcessor
 /build:map1.tmx
 
+#begin map1M2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:map1M2.tmx
+
 #begin map2.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:map2.tmx
 
+#begin map2M2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:map2M2.tmx
+
 #begin mapBoss.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:mapBoss.tmx
+
+#begin mapBossM2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:mapBossM2.tmx
 
 #begin Medieval_props_free.png
 /importer:TextureImporter
@@ -123,6 +143,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Medieval_props_free.png
+
+#begin Medieval_props_freeM2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Medieval_props_freeM2.png
 
 #begin Medieval_tiles_free2.png
 /importer:TextureImporter
@@ -141,6 +173,18 @@
 /processor:TiledMapTilesetProcessor
 /build:Medieval_tiles_free2.tsx
 
+#begin Medieval_tiles_free2M2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Medieval_tiles_free2M2.png
+
 #begin motw.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -157,6 +201,11 @@
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
 /build:objet.tsx
+
+#begin objetM2.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:objetM2.tsx
 
 #begin Quitter.png
 /importer:TextureImporter
