@@ -50,6 +50,7 @@ namespace Amplis
         private SpriteFont _texteNbMort;
         private Vector2 _positionTexteNbMort;
 
+        private Song _musiqueFond;
         private SoundEffect _sonCrie;
         private SoundEffect _sonGrincement;
         private SoundEffect _sonClic;
@@ -76,6 +77,8 @@ namespace Amplis
             if (!File.Exists("Stats.txt"))
                 ResData();
 
+            
+
             state = State.Waiting;
             base.Initialize();
         }
@@ -91,8 +94,13 @@ namespace Amplis
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
-
+            
             _texteNbMort = Content.Load<SpriteFont>("file");
+
+            _musiqueFond = Content.Load<Song>("lolo");
+            MediaPlayer.Play(_musiqueFond);
+            MediaPlayer.IsRepeating = true;
+
             _sonCrie = Content.Load<SoundEffect>("crie");
             _sonGrincement = Content.Load<SoundEffect>("grincement");
             _sonClic = Content.Load<SoundEffect>("clic");
