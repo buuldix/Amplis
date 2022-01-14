@@ -10,6 +10,8 @@ using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
 using System.IO;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Amplis
 {
@@ -48,6 +50,12 @@ namespace Amplis
         private SpriteFont _texteNbMort;
         private Vector2 _positionTexteNbMort;
 
+        private SoundEffect _sonCrie;
+        private SoundEffect _sonGrincement;
+        private SoundEffect _sonClic;
+        private SoundEffect _sonObjet;
+        private SoundEffect _sonSaut;
+
 
 
 
@@ -64,7 +72,7 @@ namespace Amplis
         {
             RecupData(out _nbMort, out _currentMap);
             _positionTexteNbMort = new Vector2(1920 / 2 - 50, 1072 - 70);
-            
+
             if (!File.Exists("Stats.txt"))
                 ResData();
 
@@ -85,7 +93,11 @@ namespace Amplis
             TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
 
             _texteNbMort = Content.Load<SpriteFont>("file");
-
+            _sonCrie = Content.Load<SoundEffect>("crie");
+            _sonGrincement = Content.Load<SoundEffect>("grincement");
+            _sonClic = Content.Load<SoundEffect>("clic");
+            _sonObjet = Content.Load<SoundEffect>("chop");
+            _sonSaut = Content.Load<SoundEffect>("saut");
         }
 
         protected override void Update(GameTime gameTime)
@@ -209,6 +221,7 @@ namespace Amplis
                 //saut
                 if (k.IsKeyDown(Keys.Space) && p.Grounded)
                 {
+                    _sonSaut.Play(0.2f, 0.0f, 0.0f);
                     p.XVelocity = 4;
                     if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                     {
@@ -228,6 +241,12 @@ namespace Amplis
                 {
                     if (k.IsKeyDown(Keys.R))
                     {
+                        if (TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible)
+                        {
+                            _sonGrincement.Play();
+                            _sonObjet.Play();
+                        }
+
                         TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible = false;
                         p.CanGo = true;
                         if (_currentMap == 3)
@@ -388,6 +407,7 @@ namespace Amplis
                 _perso.Perso.Update(deltaSecondes);
 
             }
+            //menu
             else if (state == State.Waiting)
             {
                 ushort mx = (ushort)(m.X / TiledMap.TileWidth);
@@ -398,6 +418,7 @@ namespace Amplis
                     TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
                 if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
                 {
+                    _sonClic.Play();
                     p = new Personnage(new String[,] { { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } });
                     LoadScreen(_currentMap);
                     IsMouseVisible = false;
@@ -405,9 +426,14 @@ namespace Amplis
 
                 }
                 else if (IsCollision(mx, my, "Quitter") && m.LeftButton == ButtonState.Pressed)
+                {
+                    _sonClic.Play();
                     Exit();
+                }
                 else if (IsCollision(mx, my, "Amplis") && m.LeftButton == ButtonState.Pressed)
                 {
+
+                    _sonClic.Play();
                     ResData();
                     RecupData(out _nbMort, out _currentMap);
                 }
@@ -425,7 +451,7 @@ namespace Amplis
                 _spriteBatch.Draw(_perso.Perso, p.Position);
                 _spriteBatch.DrawString(_texteNbMort, $"Mort : {_nbMort}", _positionTexteNbMort, Color.White);
             }
-            
+
 
             if (_currentMap == 2)
                 _spriteBatch.Draw(bdf.Perso, f.Position);
@@ -456,6 +482,7 @@ namespace Amplis
             p.CanGo = false;
             LoadScreen(_currentMap);
             p.YVelocity = 0;
+            _sonCrie.Play();
         }
         private String Animation(Vector2 objectif, Vector2 position)
         {
