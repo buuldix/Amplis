@@ -259,12 +259,23 @@ namespace Amplis
                 //déplacement vers la droite
                 if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && p.Position.X + _perso.Perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity)
                 {
-
-                    if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing || IsCollision(txright, tyfeet, "Seum") || IsCollision(txright, tyhead, "Seum") || IsCollision(txright, tychest, "Seum") || IsCollision(txright, tyarm, "Seum")) || IsCollision(txright, tyarm, "Grimpe"))
+                    if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                     {
-                        p.X += p.XVelocity;
-                        animation = p.Anim[p.Pers, 3];
+                        if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing || IsCollision(txright, tyfeet, "Seum") || IsCollision(txright, tyhead, "Seum") || IsCollision(txright, tychest, "Seum") || IsCollision(txright, tyarm, "Seum")) || IsCollision(txright, tyarm, "Grimpe"))
+                        {
+                            p.X += p.XVelocity;
+                            animation = p.Anim[p.Pers, 3];
+                        }
                     }
+                    else
+                    {
+                        if (!(IsCollision(txright, tyfeet, "Collision") || IsCollision(txright, tyhead, "Collision") || IsCollision(txright, tychest, "Collision") || IsCollision(txright, tyarm, "Collision") || p.Climbing || IsCollision(txright, tyarm, "Grimpe")))
+                        {
+                            p.X += p.XVelocity;
+                            animation = p.Anim[p.Pers, 3];
+                        }
+                    }
+                    
 
                 }
                 //déplacement vers la gauche
