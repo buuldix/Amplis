@@ -341,7 +341,7 @@ namespace Amplis
                 }
                 if (k.IsKeyDown(Keys.M))
                 {
-                    _currentMap = 3;
+                    _currentMap = 5;
                     LoadScreen(_currentMap);
                 }
 
