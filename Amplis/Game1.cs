@@ -299,26 +299,17 @@ namespace Amplis
                 }
 
                 //détection de collision avec le sol
-                if (_currentMap == 3)
+                if (_currentMap == 3 && TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                 {
-                    if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
-                    {
-                        if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe") || !IsCollision(tx, ty, "Seum"))
-                            p.Grounded = false;
+                    if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe") || !IsCollision(tx, ty, "Seum"))
+                        p.Grounded = false;
 
-                        else
-                            p.Grounded = true;
-                    }
                     else
-                    {
-                        if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe"))
-                            p.Grounded = false;
-
-                        else
-                            p.Grounded = true;
-                    }
-
+                        p.Grounded = true;
                 }
+
+
+
                 else
                 {
                     if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe"))
