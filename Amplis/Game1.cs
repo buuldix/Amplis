@@ -16,16 +16,16 @@ namespace Amplis
     {
         public const int PHEIGHT = 52;
         public const int PWIDTH = 72;
-        public const int BHEIGHT = 64;
-        public const int BWIDTH = 64;
+        public int FHEIGHT = 64;
+        public int FWIDTH = 64;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         //private Sprite boss;
         private Sprite bdf;
-        private string banimation;
+        private string bdfanimation;
         private Rectangle rp;
         private Rectangle rpprojectil;
-        private Rectangle rb;
+        //private Rectangle rb;
         private Vector2 bossCharge;
         private float bossChargeX;
         private float bossChargeY;
@@ -107,7 +107,7 @@ namespace Amplis
                         bossChargeY = (f.Y - bossCharge.Y) / 100;
                         _charge = false;
                         f.CanGo = false;
-                        banimation = Animation(bossCharge, f.Position);
+                        bdfanimation = Animation(bossCharge, f.Position);
                     }
                     else if (!_charge)
                     {
@@ -128,26 +128,26 @@ namespace Amplis
                         bossChargeY = (f.Y - bossCharge.Y) / 100;
                         f.CanGo = true;
                         _charge = false;
-                        banimation = Animation(bossCharge, f.Position);
+                        bdfanimation = Animation(bossCharge, f.Position);
 
                     }
 
                     rp.X = (int)p.X;
                     rp.Y = (int)p.Y;
-                    rb.X = (int)f.X;
-                    rb.Y = (int)f.Y;
+                    rpprojectil.X = (int)f.X;
+                    rpprojectil.Y = (int)f.Y;
                     rpprojectil.X = (int)p.X - 20;
                     rpprojectil.Y = (int)p.Y - 20;
                     if (k.IsKeyDown(Keys.R))
                     {
-                        if (rpprojectil.Intersects(rb) && p.Pers == 1)
+                        if (rpprojectil.Intersects(rpprojectil) && p.Pers == 1)
                         {
                             bossCharge = new Vector2(960, 540);
                             bossChargeX = (f.X - bossCharge.X) / 100;
                             bossChargeY = (f.Y - bossCharge.Y) / 100;
                             f.CanGo = true;
                             _charge = false;
-                            banimation = Animation(bossCharge, f.Position);
+                            bdfanimation = Animation(bossCharge, f.Position);
                         }
                         if (p.PersDelay == 0)
                         {
@@ -158,11 +158,11 @@ namespace Amplis
 
 
                     }
-                    if (rp.Intersects(rb))
+                    if (rp.Intersects(rpprojectil))
                         Mort();
 
 
-                    bdf.Perso.Play(banimation);
+                    bdf.Perso.Play(bdfanimation);
                     bdf.Perso.Update(deltaSecondes);
 
                 }
@@ -194,8 +194,16 @@ namespace Amplis
                 if (k.IsKeyDown(Keys.Space) && p.Grounded)
                 {
                     p.XVelocity = 4;
-                    if (!IsCollision(tx, tyoverhead, "Collision") && !IsCollision(tx, tyoverhead, "Seum"))
-                        p.YVelocity = -13;
+                    if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible){
+                        if (!IsCollision(tx, tyoverhead, "Collision") && !IsCollision(tx, tyoverhead, "Seum"))
+                            p.YVelocity = -13;
+                    }
+                    else
+                    {
+                        if (!IsCollision(tx, tyoverhead, "Collision"))
+                            p.YVelocity = -13;
+                    }
+                    
                 }
 
                 //collision objet à récupérer
@@ -207,6 +215,7 @@ namespace Amplis
                         p.CanGo = true;
                         if (_currentMap == 3)
                         {
+
                             TiledMap.GetLayer<TiledMapTileLayer>("Mort").IsVisible = true;
                             TiledMap.GetLayer<TiledMapTileLayer>("Grimpe").IsVisible = true;
                             TiledMap.GetLayer<TiledMapTileLayer>("Decor").IsVisible = true;
@@ -238,7 +247,7 @@ namespace Amplis
                         _charge = true;
                         rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
                         rpprojectil = new Rectangle((int)p.X - 20, (int)p.Y - 20, PWIDTH + 40, PHEIGHT + 40);
-                        rb = new Rectangle((int)f.X, (int)f.Y, BWIDTH, BHEIGHT);
+                        rpprojectil = new Rectangle((int)f.X, (int)f.Y, FWIDTH, FHEIGHT);
                         p.ChangePers();
                     }
                     p.CanGo = false;
@@ -305,11 +314,23 @@ namespace Amplis
 
                 //détection de collision avec le sol
 
-                if ((!IsCollision(tx, ty, "Collision") && !IsCollision(tx, ty, "Seum")) || IsCollision(tx, ty, "Grimpe"))
-                    p.Grounded = false;
+                if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
+                {
+                    if (!IsCollision(tx, ty, "Collision") && !IsCollision(tx, ty, "Seum") || IsCollision(tx, ty, "Grimpe"))
+                        p.Grounded = false;
 
+                    else
+                        p.Grounded = true;
+                }
                 else
-                    p.Grounded = true;
+                {
+                    if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe"))
+                        p.Grounded = false;
+
+                    else
+                        p.Grounded = true;
+                }
+
 
                 //vérification de la possibilité de changer de personnage
                 if (p.PersDelay > 0)
@@ -332,16 +353,16 @@ namespace Amplis
                     f.Position = new Vector2(960, 540);
                     _charge = true;
                     rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
-                    rb = new Rectangle((int)f.X, (int)f.Y, BWIDTH, BHEIGHT);
+                    rpprojectil = new Rectangle((int)f.X, (int)f.Y, FWIDTH, FHEIGHT);
                     rpprojectil = new Rectangle((int)p.X - 20, (int)p.Y - 20, PWIDTH + 40, PHEIGHT + 40);
                     p.Pers = 1;
                     _currentMap = 2;
-                    banimation = "left";
+                    bdfanimation = "left";
                     LoadScreen(_currentMap);
                 }
-                if (k.IsKeyDown(Keys.M))
+                else if (k.IsKeyDown(Keys.M))
                 {
-                    _currentMap = 3;
+                    _currentMap = 5;
                     LoadScreen(_currentMap);
                 }
 
@@ -411,7 +432,7 @@ namespace Amplis
             float diffX = objectif.X - position.X;
             float diffY = objectif.Y - position.Y;
             if (diffX > 400 || diffX < -400)
-            {
+            { 
                 if (diffX <= 0)
                     return "left";
                 else
