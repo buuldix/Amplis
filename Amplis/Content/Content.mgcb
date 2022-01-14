@@ -10,11 +10,11 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:C:\Users\mathi\OneDrive\IUT\R1_01_InitiationDev_C#\TP-TD\MesLibrairies\MonoGame\MonoGame.Extended.Content.Pipeline.dll
-/reference:C:\Users\mathi\OneDrive\IUT\R1_01_InitiationDev_C#\TP-TD\MesLibrairies\MonoGame\MonoGame.Extended.dll
-/reference:C:\Users\mathi\OneDrive\IUT\R1_01_InitiationDev_C#\TP-TD\MesLibrairies\MonoGame\MonoGame.Extended.Graphics.dll
-/reference:C:\Users\mathi\OneDrive\IUT\R1_01_InitiationDev_C#\TP-TD\MesLibrairies\MonoGame\MonoGame.Extended.Tiled.dll
-/reference:C:\Users\mathi\OneDrive\IUT\R1_01_InitiationDev_C#\TP-TD\MesLibrairies\MonoGame\Newtonsoft.Json.dll
+/reference:dll\MonoGame.Extended.Content.Pipeline.dll
+/reference:dll\MonoGame.Extended.dll
+/reference:dll\MonoGame.Extended.Graphics.dll
+/reference:dll\MonoGame.Extended.Tiled.dll
+/reference:dll\Newtonsoft.Json.dll
 
 #---------------------------------- Content ---------------------------------#
 
