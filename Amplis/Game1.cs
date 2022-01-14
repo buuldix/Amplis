@@ -43,6 +43,12 @@ namespace Amplis
         public enum State { Waiting = 0, Playing = 1 };
         private State state;
 
+        private int _nbMort;
+        private SpriteFont _texteNbMort;
+        private Vector2 _positionTexteNbMort;
+
+
+
 
         public Game1()
         {
@@ -55,6 +61,8 @@ namespace Amplis
 
         protected override void Initialize()
         {
+            _nbMort = 0;
+            _positionTexteNbMort = new Vector2(1920 / 2 - 2, 1072 - 50);
 
             _currentMap = 0;
             state = State.Waiting;
@@ -72,6 +80,8 @@ namespace Amplis
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
+
+            _texteNbMort = Content.Load<SpriteFont>("file");
 
         }
 
@@ -194,7 +204,8 @@ namespace Amplis
                 if (k.IsKeyDown(Keys.Space) && p.Grounded)
                 {
                     p.XVelocity = 4;
-                    if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible){
+                    if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
+                    {
                         if (!IsCollision(tx, tyoverhead, "Collision") && !IsCollision(tx, tyoverhead, "Seum"))
                             p.YVelocity = -13;
                     }
@@ -203,7 +214,7 @@ namespace Amplis
                         if (!IsCollision(tx, tyoverhead, "Collision"))
                             p.YVelocity = -13;
                     }
-                    
+
                 }
 
                 //collision objet à récupérer
@@ -403,6 +414,10 @@ namespace Amplis
 
             if (_currentMap == 2)
                 _spriteBatch.Draw(bdf.Perso, f.Position);
+
+            _spriteBatch.DrawString(_texteNbMort, $"Mort : {_nbMort}", _positionTexteNbMort, Color.White);
+
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -422,6 +437,7 @@ namespace Amplis
         }
         private void Mort()
         {
+            _nbMort++;
             TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible = true;
             p.CanGo = false;
             LoadScreen(_currentMap);
@@ -432,7 +448,7 @@ namespace Amplis
             float diffX = objectif.X - position.X;
             float diffY = objectif.Y - position.Y;
             if (diffX > 400 || diffX < -400)
-            { 
+            {
                 if (diffX <= 0)
                     return "left";
                 else
