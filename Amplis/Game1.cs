@@ -9,6 +9,7 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
+using System.IO;
 
 namespace Amplis
 {
@@ -61,10 +62,9 @@ namespace Amplis
 
         protected override void Initialize()
         {
-            _nbMort = 0;
+            RecupData(out _nbMort, out _currentMap);
             _positionTexteNbMort = new Vector2(1920 / 2 - 2, 1072 - 50);
 
-            _currentMap = 0;
             state = State.Waiting;
             base.Initialize();
         }
@@ -88,7 +88,10 @@ namespace Amplis
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                SaveData(_nbMort, _currentMap);
                 Exit();
+            }
             float deltaSecondes = (float)gameTime.ElapsedGameTime.TotalSeconds;
             KeyboardState k = Keyboard.GetState();
             MouseState m = Mouse.GetState();
@@ -400,6 +403,11 @@ namespace Amplis
                 }
                 else if (IsCollision(mx, my, "Quitter") && m.LeftButton == ButtonState.Pressed)
                     Exit();
+                else if (IsCollision(mx, my, "Amplis") && m.LeftButton == ButtonState.Pressed)
+                {
+                    ResData();
+                    RecupData(out _nbMort, out _currentMap);
+                }
             }
 
             base.Update(gameTime);
@@ -410,12 +418,15 @@ namespace Amplis
             _spriteBatch.Begin();
             TiledMapRenderer.Draw();
             if (state == State.Playing)
+            {
                 _spriteBatch.Draw(_perso.Perso, p.Position);
+                _spriteBatch.DrawString(_texteNbMort, $"Mort : {_nbMort}", _positionTexteNbMort, Color.White);
+            }
+            
 
             if (_currentMap == 2)
                 _spriteBatch.Draw(bdf.Perso, f.Position);
 
-            _spriteBatch.DrawString(_texteNbMort, $"Mort : {_nbMort}", _positionTexteNbMort, Color.White);
 
 
             _spriteBatch.End();
@@ -479,6 +490,30 @@ namespace Amplis
                 else
                     return "bot";
 
+            }
+        }
+        private void SaveData(int morts, int lvl)
+        {
+            using (StreamWriter sw = new StreamWriter("Stats.txt"))
+            {
+                sw.WriteLine(morts);
+                sw.WriteLine(lvl);
+            }
+        }
+        private void ResData()
+        {
+            using (StreamWriter sw = new StreamWriter("Stats.txt"))
+            {
+                sw.WriteLine(0);
+                sw.WriteLine(0);
+            }
+        }
+        private void RecupData(out int morts, out int lvl)
+        {
+            using (StreamReader sr = new StreamReader("Stats.txt"))
+            {
+                morts = int.Parse(sr.ReadLine());
+                lvl = int.Parse(sr.ReadLine());
             }
         }
     }
