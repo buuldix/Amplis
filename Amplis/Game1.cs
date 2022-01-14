@@ -301,7 +301,7 @@ namespace Amplis
                 //détection de collision avec le sol
                 if (_currentMap == 3 && TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                 {
-                    if (!IsCollision(tx, ty, "Collision") || IsCollision(tx, ty, "Grimpe") || !IsCollision(tx, ty, "Seum"))
+                    if ((!IsCollision(tx, ty, "Collision") && !IsCollision(tx, ty, "Seum")) || IsCollision(tx, ty, "Grimpe"))
                         p.Grounded = false;
 
                     else
