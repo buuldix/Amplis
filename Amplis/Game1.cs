@@ -275,18 +275,30 @@ namespace Amplis
                             animation = p.Anim[p.Pers, 3];
                         }
                     }
-                    
+
 
                 }
                 //déplacement vers la gauche
                 else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && p.Position.X - _perso.Perso.TextureRegion.Width / 2 > 0)
                 {
 
-                    if (!(IsCollision(txleft, tyfeet, "Collision") || IsCollision(txleft, tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision") || p.Climbing || IsCollision(txleft, tyfeet, "Seum") || IsCollision(txleft, tyhead, "Seum") || IsCollision(txleft, tychest, "Seum") || IsCollision(txleft, tyarm, "Seum")) || IsCollision(txleft, tyarm, "Grimpe"))
+                    if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                     {
-                        p.X -= p.XVelocity;
-                        animation = p.Anim[p.Pers, 2];
+                        if (!(IsCollision(txleft, tyfeet, "Collision") || IsCollision(txleft, tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision") || p.Climbing || IsCollision(txleft, tyfeet, "Seum") || IsCollision(txleft, tyhead, "Seum") || IsCollision(txleft, tychest, "Seum") || IsCollision(txleft, tyarm, "Seum")) || IsCollision(txleft, tyarm, "Grimpe"))
+                        {
+                            p.X -= p.XVelocity;
+                            animation = p.Anim[p.Pers, 2];
+                        }
                     }
+                    else
+                    {
+                        if (!(IsCollision(txleft, tyfeet, "Collision") || IsCollision(txleft, tyhead, "Collision") || IsCollision(txleft, tychest, "Collision") || IsCollision(txleft, tyarm, "Collision") || p.Climbing || IsCollision(txleft, tyarm, "Grimpe")))
+                        {
+                            p.X -= p.XVelocity;
+                            animation = p.Anim[p.Pers, 2];
+                        }
+                    }
+
 
 
                 }
