@@ -77,7 +77,8 @@ namespace Amplis
             if (!File.Exists("Stats.txt"))
                 ResData();
 
-            
+            //choix niveau
+            _currentMap = 3;
 
             state = State.Waiting;
             base.Initialize();
