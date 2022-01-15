@@ -62,10 +62,11 @@ namespace Amplis
 
         protected override void Initialize()
         {
-            RecupData(out _nbMort, out _currentMap);
-            _positionTexteNbMort = new Vector2(1920 / 2 - 2, 1072 - 50);
             if (!File.Exists("Stats.txt"))
                 ResData();
+            RecupData(out _nbMort, out _currentMap);
+            _positionTexteNbMort = new Vector2(1920 / 2 - 2, 1072 - 50);
+            
 
             state = State.Waiting;
             base.Initialize();
@@ -378,7 +379,7 @@ namespace Amplis
                 }
                 else if (k.IsKeyDown(Keys.M))
                 {
-                    _currentMap = 5;
+                    _currentMap = 3;
                     LoadScreen(_currentMap);
                 }
 
