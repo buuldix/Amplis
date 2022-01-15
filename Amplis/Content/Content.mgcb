@@ -23,6 +23,24 @@
 /processor:TiledMapProcessor
 /build:accueil.tmx
 
+#begin chop.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:chop.wav
+
+#begin clic.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:clic.wav
+
+#begin crie.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:crie.wav
+
 #begin decors.tsx
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
@@ -76,6 +94,12 @@
 /processorParam:TextureFormat=Color
 /build:fireball_0.png
 
+#begin grincement.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:grincement.wav
+
 #begin Lastmap.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -97,6 +121,12 @@
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
 /build:logo.tsx
+
+#begin lolo.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:lolo.mp3
 
 #begin map1.tmx
 /importer:TiledMapImporter
@@ -197,4 +227,10 @@
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
 /build:objetM2.tsx
+
+#begin saut.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:saut.wav
 
