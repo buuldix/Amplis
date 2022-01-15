@@ -12,6 +12,8 @@ using System;
 using System.IO;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
+using MonoGame.Extended;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Amplis
 {
@@ -56,6 +58,11 @@ namespace Amplis
         private SoundEffect _sonClic;
         private SoundEffect _sonObjet;
         private SoundEffect _sonSaut;
+        
+        //camera
+        private OrthographicCamera _camera;
+        private Vector2 _cameraPosition;
+
 
 
 
@@ -77,10 +84,16 @@ namespace Amplis
             RecupData(out _nbMort, out _currentMap);
             _positionTexteNbMort = new Vector2(1920 / 2 - 50, 1072 - 70);
 
-            //choix niveau
-            _currentMap = 3;
-
             state = State.Waiting;
+
+            //choix niveau
+            _currentMap = 5;
+
+            //camera
+            var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1072);
+            _camera = new OrthographicCamera(viewportadapter);
+            _cameraPosition = new Vector2(1920 / 2, 1072 / 2);
+
             base.Initialize();
         }
 
@@ -135,6 +148,15 @@ namespace Amplis
                 ushort tychest = (ushort)(p.Position.Y / TiledMap.TileHeight);
                 ushort tyhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 1);
                 ushort tyoverhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 2);
+
+                //camera
+                if (_currentMap == 5)
+                {
+                    _camera.LookAt(_cameraPosition);
+                    TiledMapRenderer.Update(gameTime);
+                    MoveCamera(gameTime);
+                }
+
                 if (_currentMap == 2)
                 {
                     if (_charge && f.CanGo)
@@ -454,7 +476,8 @@ namespace Amplis
         protected override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin();
-            TiledMapRenderer.Draw();
+            //TiledMapRenderer.Draw();
+            TiledMapRenderer.Draw(_camera.GetViewMatrix());
             if (state == State.Playing)
             {
                 _spriteBatch.Draw(_perso.Perso, p.Position);
@@ -470,6 +493,42 @@ namespace Amplis
             _spriteBatch.End();
             base.Draw(gameTime);
         }
+        //camera
+        private Vector2 GetMovementDirection()
+        {
+            var movementDirection = Vector2.Zero;
+            var state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Q) || state.IsKeyDown(Keys.Left))
+            {
+                movementDirection -= Vector2.UnitX;
+            }
+            if (state.IsKeyDown(Keys.D) || state.IsKeyDown(Keys.Right))
+            {
+                movementDirection += Vector2.UnitX;
+            }
+
+
+
+
+
+            // Can't normalize the zero vector so test for it before normalizing
+            if (movementDirection != Vector2.Zero)
+            {
+                movementDirection.Normalize();
+            }
+
+            return movementDirection;
+        }
+
+        private void MoveCamera(GameTime gameTime)
+        {
+            var speed = 200;
+            var seconds = gameTime.GetElapsedSeconds();
+            var movementDirection = GetMovementDirection();
+            _cameraPosition += speed * movementDirection * seconds;
+        }
+
+
         private bool IsCollision(ushort x, ushort y, String layer)
         {
             TiledMapTile? tile;
