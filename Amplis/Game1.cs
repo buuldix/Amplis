@@ -71,11 +71,11 @@ namespace Amplis
 
         protected override void Initialize()
         {
-            RecupData(out _nbMort, out _currentMap);
-            _positionTexteNbMort = new Vector2(1920 / 2 - 50, 1072 - 70);
-
             if (!File.Exists("Stats.txt"))
                 ResData();
+
+            RecupData(out _nbMort, out _currentMap);
+            _positionTexteNbMort = new Vector2(1920 / 2 - 50, 1072 - 70);
 
             //choix niveau
             _currentMap = 3;
