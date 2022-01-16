@@ -87,7 +87,7 @@ namespace Amplis
             state = State.Waiting;
 
             //choix niveau
-            _currentMap = 5;
+            _currentMap = 0;
 
             //camera
             var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1072);
@@ -112,7 +112,7 @@ namespace Amplis
             _texteNbMort = Content.Load<SpriteFont>("file");
 
             _musiqueFond = Content.Load<Song>("lolo");
-            MediaPlayer.Play(_musiqueFond);
+            //MediaPlayer.Play(_musiqueFond);
             MediaPlayer.IsRepeating = true;
 
             _sonCrie = Content.Load<SoundEffect>("crie");
@@ -476,7 +476,6 @@ namespace Amplis
         protected override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin();
-            //TiledMapRenderer.Draw();
             TiledMapRenderer.Draw(_camera.GetViewMatrix());
             if (state == State.Playing)
             {
