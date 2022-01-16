@@ -30,6 +30,7 @@ namespace Amplis
         private string bdfanimation;
         private Rectangle rp;
         private Rectangle rpprojectil;
+        private Rectangle rbdf;
         //private Rectangle rb;
         private Vector2 bossCharge;
         private float bossChargeX;
@@ -153,12 +154,13 @@ namespace Amplis
                 if (_currentMap == 5)
                 {
                     _camera.LookAt(_cameraPosition);
-                    TiledMapRenderer.Update(gameTime);
+                    //TiledMapRenderer.Update(gameTime);
                     MoveCamera(gameTime);
                 }
 
                 if (_currentMap == 2)
                 {
+                    IsMouseVisible = true;
                     if (_charge && f.CanGo)
                     {
                         bossCharge = p.Position;
@@ -193,15 +195,15 @@ namespace Amplis
 
                     rp.X = (int)p.X;
                     rp.Y = (int)p.Y;
-                    rpprojectil.X = (int)f.X;
-                    rpprojectil.Y = (int)f.Y;
+                    rbdf.X = (int)f.X;
+                    rbdf.Y = (int)f.Y;
                     rpprojectil.X = (int)p.X - 20;
                     rpprojectil.Y = (int)p.Y - 20;
                     if (k.IsKeyDown(Keys.R))
                     {
-                        if (rpprojectil.Intersects(rpprojectil) && p.Pers == 1)
+                        if (rpprojectil.Intersects(rbdf) && p.Pers == 1)
                         {
-                            bossCharge = new Vector2(960, 540);
+                            bossCharge = new Vector2(m.X,m.Y);
                             bossChargeX = (f.X - bossCharge.X) / 100;
                             bossChargeY = (f.Y - bossCharge.Y) / 100;
                             f.CanGo = true;
@@ -224,6 +226,10 @@ namespace Amplis
                     bdf.Perso.Play(bdfanimation);
                     bdf.Perso.Update(deltaSecondes);
 
+                }
+                else
+                {
+                    IsMouseVisible = false;
                 }
                 //gestion de l'escaslade des échelles
                 if (IsCollision(tx, tyfeet, "Grimpe") && (k.IsKeyDown(Keys.S) || k.IsKeyDown(Keys.Z) || k.IsKeyDown(Keys.Down) || k.IsKeyDown(Keys.Up)) && TiledMap.GetLayer<TiledMapTileLayer>("Grimpe").IsVisible)
@@ -314,7 +320,7 @@ namespace Amplis
                         _charge = true;
                         rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
                         rpprojectil = new Rectangle((int)p.X - 20, (int)p.Y - 20, PWIDTH + 40, PHEIGHT + 40);
-                        rpprojectil = new Rectangle((int)f.X, (int)f.Y, FWIDTH, FHEIGHT);
+                        rbdf = new Rectangle((int)f.X, (int)f.Y, FWIDTH, FHEIGHT);
                         p.ChangePers();
                     }
                     p.CanGo = false;
@@ -416,11 +422,11 @@ namespace Amplis
                 if (k.IsKeyDown(Keys.L))
                 {
                     bdf = new Sprite(this, "fireball.sf");
-                    f = new Personnage(new String[,] { { "left", "topleft", "top", "topright", "right", "botright", "bot", "botleft" } } /*{ { "face", "left", "right", "back" } }*/);
+                    f = new Personnage(new String[,] { { "left", "topleft", "top", "topright", "right", "botright", "bot", "botleft" } } );
                     f.Position = new Vector2(960, 540);
                     _charge = true;
                     rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
-                    rpprojectil = new Rectangle((int)f.X, (int)f.Y, FWIDTH, FHEIGHT);
+                    rbdf = new Rectangle((int)f.X, (int)f.Y, FWIDTH, FHEIGHT);
                     rpprojectil = new Rectangle((int)p.X - 20, (int)p.Y - 20, PWIDTH + 40, PHEIGHT + 40);
                     p.Pers = 1;
                     _currentMap = 2;
@@ -506,11 +512,6 @@ namespace Amplis
                 movementDirection += Vector2.UnitX;
             }
 
-
-
-
-
-            // Can't normalize the zero vector so test for it before normalizing
             if (movementDirection != Vector2.Zero)
             {
                 movementDirection.Normalize();
@@ -524,7 +525,7 @@ namespace Amplis
             var speed = 200;
             var seconds = gameTime.GetElapsedSeconds();
             var movementDirection = GetMovementDirection();
-            _cameraPosition += speed * movementDirection * seconds;
+            _cameraPosition = speed * movementDirection * seconds;
         }
 
 
