@@ -113,7 +113,7 @@ namespace Amplis
             _texteNbMort = Content.Load<SpriteFont>("file");
 
             _musiqueFond = Content.Load<Song>("lolo");
-            //MediaPlayer.Play(_musiqueFond);
+            MediaPlayer.Play(_musiqueFond);
             MediaPlayer.IsRepeating = true;
 
             _sonCrie = Content.Load<SoundEffect>("crie");
