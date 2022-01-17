@@ -30,6 +30,7 @@ namespace Amplis
         private Sprite dragon;
         private Sprite bdf;
         private string bdfanimation;
+        private String dragonAnimation;
         private Rectangle rp;
         private Rectangle rpprojectil;
         private Rectangle rbdf;
@@ -265,6 +266,12 @@ namespace Amplis
                     bdf.Perso.Play(bdfanimation);
                     bdf.Perso.Update(deltaSecondes);
                     d.X += d.XVelocity;
+                    if (d.XVelocity < 0)
+                        dragonAnimation = "left";
+                    else
+                        dragonAnimation = "right";
+                    dragon.Perso.Play(dragonAnimation);
+                    dragon.Perso.Update(deltaSecondes);
                 }
                 else
                 {
@@ -455,9 +462,10 @@ namespace Amplis
 
                 if (k.IsKeyDown(Keys.L))
                 {
-                    _currentMap = 2;
+                    _currentMap = 4;
                     LoadScreen(_currentMap);
-                    InitBoss();
+                    if(_currentMap==2)
+                        InitBoss();
                 }
                 else if (k.IsKeyDown(Keys.M))
                 {
@@ -523,7 +531,7 @@ namespace Amplis
                 }
                 else
                 {
-                    _spriteBatch.DrawString(_texte, $"Mort : {_nbMort}", _positionTexte, Color.White);
+                    _spriteBatch.DrawString(_texte, $"{(_nbMort == 0 ? "Mort" : "Morts")} : {_nbMort}", _positionTexte, Color.White);
                 }
             }
 
@@ -676,7 +684,6 @@ namespace Amplis
             _bossCanBeTouched = false;
             _dragonhealth = 3;
             p.Pers = 1;
-
         }
     }
 }
