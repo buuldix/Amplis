@@ -122,6 +122,23 @@
 /processor:TiledMapTilesetProcessor
 /build:logo.tsx
 
+#begin logoGrand.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:logoGrand.png
+
+#begin logoGrand.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:logoGrand.tsx
+
 #begin lolo.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -227,6 +244,11 @@
 /importer:TiledMapTilesetImporter
 /processor:TiledMapTilesetProcessor
 /build:objetM2.tsx
+
+#begin oeuvreDart.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:oeuvreDart.tmx
 
 #begin saut.wav
 /importer:WavImporter
