@@ -55,8 +55,8 @@ namespace Amplis
         private State state;
 
         private int _nbMort;
-        private SpriteFont _texteNbMort;
-        private Vector2 _positionTexteNbMort;
+        private SpriteFont _texte;
+        private Vector2 _positionTexte;
 
         private Song _musiqueFond;
         private SoundEffect _sonCrie;
@@ -88,12 +88,12 @@ namespace Amplis
                 ResData();
 
             RecupData(out _nbMort, out _currentMap);
-            _positionTexteNbMort = new Vector2(1920 / 2 - 50, 1072 - 70);
+            _positionTexte = new Vector2(1920 / 2 - 50, 1072 - 70);
 
             state = State.Waiting;
 
             //choix niveau
-            _currentMap = 0;
+            _currentMap = 1;
 
             
 
@@ -117,7 +117,7 @@ namespace Amplis
             _graphics.ApplyChanges();
             TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
             
-            _texteNbMort = Content.Load<SpriteFont>("file");
+            _texte = Content.Load<SpriteFont>("file");
 
             //_musiqueFond = Content.Load<Song>("lolo");
             //MediaPlayer.Play(_musiqueFond);
@@ -285,7 +285,7 @@ namespace Amplis
                 //saut
                 if (k.IsKeyDown(Keys.Space) && p.Grounded)
                 {
-                    //_sonSaut.Play(0.2f, 0.0f, 0.0f);
+                    _sonSaut.Play(0.2f, 0.0f, 0.0f);
                     p.XVelocity = 4;
                     if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                     {
@@ -307,8 +307,8 @@ namespace Amplis
                     {
                         if (TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible)
                         {
-                            //_sonGrincement.Play();
-                            //_sonObjet.Play();
+                            _sonGrincement.Play();
+                            _sonObjet.Play();
                         }
 
                         TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible = false;
@@ -469,7 +469,7 @@ namespace Amplis
                     TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
                 if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
                 {
-                    //_sonClic.Play();
+                    _sonClic.Play();
                     p = new Personnage(new String[,] { { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } });
                     LoadScreen(_currentMap);
                     IsMouseVisible = false;
@@ -478,13 +478,13 @@ namespace Amplis
                 }
                 else if (IsCollision(mx, my, "Quitter") && m.LeftButton == ButtonState.Pressed)
                 {
-                    //_sonClic.Play();
+                    _sonClic.Play();
                     Exit();
                 }
                 else if (IsCollision(mx, my, "Amplis") && m.LeftButton == ButtonState.Pressed)
                 {
 
-                    //_sonClic.Play();
+                    _sonClic.Play();
                     ResData();
                     RecupData(out _nbMort, out _currentMap);
                 }
@@ -500,7 +500,14 @@ namespace Amplis
             if (state == State.Playing)
             {
                 _spriteBatch.Draw(_perso.Perso, p.Position);
-                _spriteBatch.DrawString(_texteNbMort, $"Mort : {_nbMort}", _positionTexteNbMort, Color.White);
+                if (_currentMap == 2)
+                {
+                    _spriteBatch.DrawString(_texte, $"Vie Boss : {_dragonhealth}", _positionTexte, Color.White);
+                }
+                else
+                {
+                    _spriteBatch.DrawString(_texte, $"Mort : {_nbMort}", _positionTexte, Color.White);
+                }
             }
 
 
@@ -569,7 +576,7 @@ namespace Amplis
             p.CanGo = false;
             LoadScreen(_currentMap);
             p.YVelocity = 0;
-            //_sonCrie.Play();
+            _sonCrie.Play();
         }
         private String Animation(Vector2 objectif, Vector2 position)
         {
