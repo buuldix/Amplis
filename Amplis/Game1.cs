@@ -64,7 +64,11 @@ namespace Amplis
         private SoundEffect _sonClic;
         private SoundEffect _sonObjet;
         private SoundEffect _sonSaut;
-        
+        private SoundEffect _sonFeu;
+        private SoundEffect _sonAie;
+
+
+
         //camera
         private OrthographicCamera _camera;
         private Vector2 _cameraPosition;
@@ -128,6 +132,8 @@ namespace Amplis
             _sonClic = Content.Load<SoundEffect>("clic");
             _sonObjet = Content.Load<SoundEffect>("chop");
             _sonSaut = Content.Load<SoundEffect>("saut");
+            _sonFeu = Content.Load<SoundEffect>("feu");
+            _sonAie = Content.Load<SoundEffect>("aie");
         }
 
         protected override void Update(GameTime gameTime)
@@ -165,6 +171,7 @@ namespace Amplis
                     MoveCamera(gameTime);
                 }
 
+                //Boss
                 if (_currentMap == 2 && _isBossAlive)
                 {
                     Console.WriteLine($"Charge : {_charge}\nCango : {f.CanGo}\nBossCanBeTouched : {_bossCanBeTouched}\nVie Boss : {_dragonhealth}");
@@ -175,6 +182,7 @@ namespace Amplis
                     IsMouseVisible = true;
                     if ((_charge && f.CanGo)|| f.Position == new Vector2(-100,-100))
                     {
+                        _sonFeu.Play();
                         f.Position = d.Position;
                         bossCharge = p.Position;
                         bossChargeX = (f.X - bossCharge.X) / 100;
@@ -214,6 +222,7 @@ namespace Amplis
                     {
                         if (rpprojectil.Intersects(rbdf) && p.Pers == 1)
                         {
+                            _sonFeu.Play();
                             bossCharge = new Vector2(m.X,m.Y);
                             bossChargeX = (f.X - bossCharge.X) / 100;
                             bossChargeY = (f.Y - bossCharge.Y) / 100;
@@ -233,15 +242,17 @@ namespace Amplis
                     }
                     if (rdragon.Intersects(rbdf) && _bossCanBeTouched)
                     {
+                        _sonAie.Play();
                         _dragonhealth--;
                         f.Position = new Vector2(-100, -100);
                         if (_dragonhealth == 0) {
+                            _sonAie.Play();
+                            _sonGrincement.Play();                           
                             _isBossAlive = false;
                             d.Position = new Vector2(-100, -100);
                             f.Position = new Vector2(-100, -100);
                             p.CanGo = true;
-                        }
-                       
+                        }                   
                     }
                     if (rp.Intersects(rbdf))
                         Mort();
