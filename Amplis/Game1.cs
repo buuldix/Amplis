@@ -98,7 +98,7 @@ namespace Amplis
             state = State.Waiting;
 
             //choix niveau
-            _currentMap = 2;
+            _currentMap = 6;
 
 
             
