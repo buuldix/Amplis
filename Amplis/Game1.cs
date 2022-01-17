@@ -93,7 +93,8 @@ namespace Amplis
             state = State.Waiting;
 
             //choix niveau
-            _currentMap = 1;
+            _currentMap = 2;
+
 
             
 
@@ -469,8 +470,13 @@ namespace Amplis
                     TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
                 if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
                 {
+                    
                     _sonClic.Play();
                     p = new Personnage(new String[,] { { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } });
+                    
+                    if (_currentMap == 2)
+                        InitBoss();
+
                     LoadScreen(_currentMap);
                     IsMouseVisible = false;
 
@@ -511,7 +517,7 @@ namespace Amplis
             }
 
 
-            if (_currentMap == 2)
+            if (_currentMap == 2 && state == State.Playing)
             {
                 _spriteBatch.Draw(bdf.Perso, f.Position);
                 _spriteBatch.Draw(dragon.Perso, d.Position);
