@@ -97,7 +97,8 @@ namespace Amplis
             state = State.Waiting;
 
             //choix niveau
-            _currentMap = 1;
+            _currentMap = 2;
+
 
             
 
@@ -174,7 +175,7 @@ namespace Amplis
                 //Boss
                 if (_currentMap == 2 && _isBossAlive)
                 {
-                    Console.WriteLine($"Charge : {_charge}\nCango : {f.CanGo}\nBossCanBeTouched : {_bossCanBeTouched}\nVie Boss : {_dragonhealth}");
+                    //Console.WriteLine($"Charge : {_charge}\nCango : {f.CanGo}\nBossCanBeTouched : {_bossCanBeTouched}\nVie Boss : {_dragonhealth}");
                     if(d.X > 1500 || d.X < 200)
                     {
                         d.XVelocity = -d.XVelocity;
@@ -199,7 +200,6 @@ namespace Amplis
                         if (Math.Round(bossCharge.X, 0) == Math.Round(f.X, 0) && Math.Round(bossCharge.Y, 0) == Math.Round(f.Y, 0))
                         {
                             _charge = true;
-                            Console.WriteLine("oui");
                         }
                         else
                         {
@@ -255,7 +255,11 @@ namespace Amplis
                         }                   
                     }
                     if (rp.Intersects(rbdf))
+                    {
                         Mort();
+                        InitBoss();
+                    }
+                        
 
 
                     bdf.Perso.Play(bdfanimation);
@@ -353,6 +357,8 @@ namespace Amplis
                     }
                     p.CanGo = false;
                     LoadScreen(_currentMap);
+                    if (_currentMap == 3 && p.Pers == 1)
+                        p.ChangePers();
                 }
 
 
@@ -475,8 +481,13 @@ namespace Amplis
                     TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
                 if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
                 {
+                    
                     _sonClic.Play();
                     p = new Personnage(new String[,] { { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } });
+                    
+                    if (_currentMap == 2)
+                        InitBoss();
+
                     LoadScreen(_currentMap);
                     IsMouseVisible = false;
 
@@ -517,7 +528,7 @@ namespace Amplis
             }
 
 
-            if (_currentMap == 2)
+            if (_currentMap == 2 && state == State.Playing)
             {
                 _spriteBatch.Draw(bdf.Perso, f.Position);
                 _spriteBatch.Draw(dragon.Perso, d.Position);
@@ -663,8 +674,8 @@ namespace Amplis
             bdfanimation = "left";
             _isBossAlive = true;
             _bossCanBeTouched = false;
-            _dragonhealth = 4;
-            p.ChangePers();
+            _dragonhealth = 3;
+            p.Pers = 1;
 
         }
     }
