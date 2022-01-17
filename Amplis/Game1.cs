@@ -21,28 +21,33 @@ namespace Amplis
     {
         public const int PHEIGHT = 52;
         public const int PWIDTH = 72;
-        public int FHEIGHT = 64;
-        public int FWIDTH = 64;
+        public const int FHEIGHT = 64;
+        public const int FWIDTH = 64;
+        public const int DHEIGHT = 70;
+        public const int DWIDTH = 100;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        //private Sprite boss;
+        private Sprite dragon;
         private Sprite bdf;
         private string bdfanimation;
         private Rectangle rp;
         private Rectangle rpprojectil;
         private Rectangle rbdf;
-        //private Rectangle rb;
+        private Rectangle rdragon;
         private Vector2 bossCharge;
         private float bossChargeX;
         private float bossChargeY;
+        private bool _isBossAlive;
+        private bool _bossCanBeTouched;
 
         public Personnage p;
-        //private Personnage b;
+        private Personnage d;
         private Personnage f;
         public TiledMap TiledMap { get; set; }
         private TiledMapTileLayer _mapLayer;
         private Sprite _perso;
         private bool _charge;
+        private int _dragonhealth;
         public TiledMapRenderer TiledMapRenderer { get; set; }
         private int _currentMap;
         private readonly ScreenManager _screenManager;
@@ -90,6 +95,8 @@ namespace Amplis
             //choix niveau
             _currentMap = 0;
 
+            
+
             //camera
             var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1072);
             _camera = new OrthographicCamera(viewportadapter);
@@ -112,9 +119,9 @@ namespace Amplis
             
             _texteNbMort = Content.Load<SpriteFont>("file");
 
-            _musiqueFond = Content.Load<Song>("lolo");
-            MediaPlayer.Play(_musiqueFond);
-            MediaPlayer.IsRepeating = true;
+            //_musiqueFond = Content.Load<Song>("lolo");
+            //MediaPlayer.Play(_musiqueFond);
+           // MediaPlayer.IsRepeating = true;
 
             _sonCrie = Content.Load<SoundEffect>("crie");
             _sonGrincement = Content.Load<SoundEffect>("grincement");
@@ -158,23 +165,33 @@ namespace Amplis
                     MoveCamera(gameTime);
                 }
 
-                if (_currentMap == 2)
+                if (_currentMap == 2 && _isBossAlive)
                 {
-                    IsMouseVisible = true;
-                    if (_charge && f.CanGo)
+                    Console.WriteLine($"Charge : {_charge}\nCango : {f.CanGo}\nBossCanBeTouched : {_bossCanBeTouched}\nVie Boss : {_dragonhealth}");
+                    if(d.X > 1500 || d.X < 200)
                     {
+                        d.XVelocity = -d.XVelocity;
+                    }
+                    IsMouseVisible = true;
+                    if ((_charge && f.CanGo)|| f.Position == new Vector2(-100,-100))
+                    {
+                        f.Position = d.Position;
                         bossCharge = p.Position;
                         bossChargeX = (f.X - bossCharge.X) / 100;
                         bossChargeY = (f.Y - bossCharge.Y) / 100;
                         _charge = false;
                         f.CanGo = false;
+                        _bossCanBeTouched = false;
+                        
                         bdfanimation = Animation(bossCharge, f.Position);
+
                     }
                     else if (!_charge)
                     {
                         if (Math.Round(bossCharge.X, 0) == Math.Round(f.X, 0) && Math.Round(bossCharge.Y, 0) == Math.Round(f.Y, 0))
                         {
                             _charge = true;
+                            Console.WriteLine("oui");
                         }
                         else
                         {
@@ -183,22 +200,16 @@ namespace Amplis
                         }
                     }
                     else if (_charge && !f.CanGo)
-                    {
-                        bossCharge = new Vector2(960, 540);
-                        bossChargeX = (f.X - bossCharge.X) / 100;
-                        bossChargeY = (f.Y - bossCharge.Y) / 100;
-                        f.CanGo = true;
-                        _charge = false;
-                        bdfanimation = Animation(bossCharge, f.Position);
-
-                    }
+                        f.Position = new Vector2(-100, -100);
 
                     rp.X = (int)p.X;
                     rp.Y = (int)p.Y;
                     rbdf.X = (int)f.X;
                     rbdf.Y = (int)f.Y;
-                    rpprojectil.X = (int)p.X - 20;
-                    rpprojectil.Y = (int)p.Y - 20;
+                    rpprojectil.X = (int)p.X - 80;
+                    rpprojectil.Y = (int)p.Y - 80;
+                    rdragon.X = (int)d.X;
+                    rdragon.Y = (int)d.Y;
                     if (k.IsKeyDown(Keys.R))
                     {
                         if (rpprojectil.Intersects(rbdf) && p.Pers == 1)
@@ -208,6 +219,7 @@ namespace Amplis
                             bossChargeY = (f.Y - bossCharge.Y) / 100;
                             f.CanGo = true;
                             _charge = false;
+                            _bossCanBeTouched = true;
                             bdfanimation = Animation(bossCharge, f.Position);
                         }
                         if (p.PersDelay == 0)
@@ -219,13 +231,25 @@ namespace Amplis
 
 
                     }
-                    if (rp.Intersects(rpprojectil))
+                    if (rdragon.Intersects(rbdf) && _bossCanBeTouched)
+                    {
+                        _dragonhealth--;
+                        f.Position = new Vector2(-100, -100);
+                        if (_dragonhealth == 0) {
+                            _isBossAlive = false;
+                            d.Position = new Vector2(-100, -100);
+                            f.Position = new Vector2(-100, -100);
+                            p.CanGo = true;
+                        }
+                       
+                    }
+                    if (rp.Intersects(rbdf))
                         Mort();
 
 
                     bdf.Perso.Play(bdfanimation);
                     bdf.Perso.Update(deltaSecondes);
-
+                    d.X += d.XVelocity;
                 }
                 else
                 {
@@ -258,7 +282,7 @@ namespace Amplis
                 //saut
                 if (k.IsKeyDown(Keys.Space) && p.Grounded)
                 {
-                    _sonSaut.Play(0.2f, 0.0f, 0.0f);
+                    //_sonSaut.Play(0.2f, 0.0f, 0.0f);
                     p.XVelocity = 4;
                     if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                     {
@@ -280,8 +304,8 @@ namespace Amplis
                     {
                         if (TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible)
                         {
-                            _sonGrincement.Play();
-                            _sonObjet.Play();
+                            //_sonGrincement.Play();
+                            //_sonObjet.Play();
                         }
 
                         TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible = false;
@@ -314,14 +338,7 @@ namespace Amplis
                     _currentMap++;
                     if (_currentMap == 2)
                     {
-                        bdf = new Sprite(this, "fireball.sf");
-                        f = new Personnage(new String[,] { { "left", "topleft", "top", "topright", "right", "botright", "bot", "botleft" } });
-                        f.Position = new Vector2(960, 540);
-                        _charge = true;
-                        rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
-                        rpprojectil = new Rectangle((int)p.X - 20, (int)p.Y - 20, PWIDTH + 40, PHEIGHT + 40);
-                        rbdf = new Rectangle((int)f.X, (int)f.Y, FWIDTH, FHEIGHT);
-                        p.ChangePers();
+                        InitBoss();
                     }
                     p.CanGo = false;
                     LoadScreen(_currentMap);
@@ -421,17 +438,9 @@ namespace Amplis
 
                 if (k.IsKeyDown(Keys.L))
                 {
-                    bdf = new Sprite(this, "fireball.sf");
-                    f = new Personnage(new String[,] { { "left", "topleft", "top", "topright", "right", "botright", "bot", "botleft" } } );
-                    f.Position = new Vector2(960, 540);
-                    _charge = true;
-                    rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
-                    rbdf = new Rectangle((int)f.X, (int)f.Y, FWIDTH, FHEIGHT);
-                    rpprojectil = new Rectangle((int)p.X - 20, (int)p.Y - 20, PWIDTH + 40, PHEIGHT + 40);
-                    p.Pers = 1;
                     _currentMap = 2;
-                    bdfanimation = "left";
                     LoadScreen(_currentMap);
+                    InitBoss();
                 }
                 else if (k.IsKeyDown(Keys.M))
                 {
@@ -455,7 +464,7 @@ namespace Amplis
                     TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
                 if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
                 {
-                    _sonClic.Play();
+                    //_sonClic.Play();
                     p = new Personnage(new String[,] { { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } });
                     LoadScreen(_currentMap);
                     IsMouseVisible = false;
@@ -464,13 +473,13 @@ namespace Amplis
                 }
                 else if (IsCollision(mx, my, "Quitter") && m.LeftButton == ButtonState.Pressed)
                 {
-                    _sonClic.Play();
+                    //_sonClic.Play();
                     Exit();
                 }
                 else if (IsCollision(mx, my, "Amplis") && m.LeftButton == ButtonState.Pressed)
                 {
 
-                    _sonClic.Play();
+                    //_sonClic.Play();
                     ResData();
                     RecupData(out _nbMort, out _currentMap);
                 }
@@ -491,7 +500,12 @@ namespace Amplis
 
 
             if (_currentMap == 2)
+            {
                 _spriteBatch.Draw(bdf.Perso, f.Position);
+                _spriteBatch.Draw(dragon.Perso, d.Position);
+            }
+                
+
 
 
 
@@ -550,7 +564,7 @@ namespace Amplis
             p.CanGo = false;
             LoadScreen(_currentMap);
             p.YVelocity = 0;
-            _sonCrie.Play();
+            //_sonCrie.Play();
         }
         private String Animation(Vector2 objectif, Vector2 position)
         {
@@ -613,6 +627,27 @@ namespace Amplis
                 morts = int.Parse(sr.ReadLine());
                 lvl = int.Parse(sr.ReadLine());
             }
+        }
+        private void InitBoss()
+        {
+            bdf = new Sprite(this, "fireball.sf");
+            dragon = new Sprite(this, "dragon.sf");
+            f = new Personnage(new String[,] { { "left", "topleft", "top", "topright", "right", "botright", "bot", "botleft" } });
+            d = new Personnage(new String[,] { { "face", "left", "right", "back" } });
+            d.Position = new Vector2(960, 540);
+            f.Position = d.Position;
+            d.XVelocity = 5;
+            _charge = true;
+            rp = new Rectangle((int)p.X, (int)p.Y, PWIDTH, PHEIGHT);
+            rpprojectil = new Rectangle((int)p.X - 80, (int)p.Y - 80, PWIDTH + 160, PHEIGHT + 160);
+            rbdf = new Rectangle((int)f.X, (int)f.Y, FWIDTH, FHEIGHT);
+            rdragon = new Rectangle((int)d.X, (int)d.Y, DWIDTH, DHEIGHT);
+            bdfanimation = "left";
+            _isBossAlive = true;
+            _bossCanBeTouched = false;
+            _dragonhealth = 4;
+            p.ChangePers();
+
         }
     }
 }
