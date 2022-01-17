@@ -88,7 +88,7 @@ namespace Amplis
             state = State.Waiting;
 
             //choix niveau
-            _currentMap = 0;
+            _currentMap = 1;
 
             //camera
             var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1072);
