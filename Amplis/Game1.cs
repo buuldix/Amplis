@@ -82,6 +82,8 @@ namespace Amplis
                 ResData();
 
             RecupData(out _nbMort, out _currentMap);
+            if (_currentMap == 6)
+                ResData();
             _positionTexte = new Vector2(1920 / 2 - 50, 1072 - 70);
 
             state = State.Waiting;
@@ -118,10 +120,7 @@ namespace Amplis
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                SaveData(_nbMort, _currentMap);
                 Exit();
-            }
             float deltaSecondes = (float)gameTime.ElapsedGameTime.TotalSeconds;
             KeyboardState k = Keyboard.GetState();
             MouseState m = Mouse.GetState();
@@ -141,12 +140,11 @@ namespace Amplis
                 ushort tyhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 1);
                 ushort tyoverhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 2);
                 //Map avec une caméra
-                if (_currentMap == 5)
-                {
-                    _camera.Position = new Vector2(1920 * (int)mapPart, 0);
-                    _camera.Origin = new Vector2(0, 0);
 
-                }
+                _camera.Position = new Vector2(1920 * (int)mapPart, 0);
+                _camera.Origin = new Vector2(0, 0);
+
+
 
                 //Boss
                 if (_currentMap == 2 && _isBossAlive)
@@ -340,7 +338,11 @@ namespace Amplis
                     p.CanGo = false;
                     LoadScreen(_currentMap);
                     if (_currentMap == 3 && p.Pers == 1)
+                    {
                         p.ChangePers();
+                        p.PersDelay = 0;
+                    }
+                        
                 }
 
 
@@ -373,14 +375,15 @@ namespace Amplis
                             animation = p.Anim[p.Pers, 3];
                         }
                     }
-                }else if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && !(p.Position.X + _perso.Perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity))
+                }
+                else if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && !(p.Position.X + _perso.Perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity))
                 {
                     if (mapPart == MapPart.Start)
                         mapPart = MapPart.Mid;
                     else if (mapPart == MapPart.Mid)
                         mapPart = MapPart.End;
                     p.X = 10;
-                
+
                 }
                 //déplacement vers la gauche
                 else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && p.Position.X - _perso.Perso.TextureRegion.Width / 2 > 0)
@@ -412,9 +415,9 @@ namespace Amplis
                     p.X = 1900;
                 }
 
-                    //détection de collision avec le sol
+                //détection de collision avec le sol
 
-                    if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
+                if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                 {
                     if (!IsCollision(tx, ty, "Collision") && !IsCollision(tx, ty, "Seum") || IsCollision(tx, ty, "Grimpe"))
                         p.Grounded = false;
@@ -450,11 +453,13 @@ namespace Amplis
                 {
                     _currentMap = 0;
                     LoadScreen(_currentMap);
+                    p.Pers = 0;
                 }
                 if (k.IsKeyDown(Keys.X))
                 {
                     _currentMap = 1;
                     LoadScreen(_currentMap);
+                    p.Pers = 0;
                 }
                 if (k.IsKeyDown(Keys.C))
                 {
@@ -466,21 +471,25 @@ namespace Amplis
                 {
                     _currentMap = 3;
                     LoadScreen(_currentMap);
+                    p.Pers = 0;
                 }
                 if (k.IsKeyDown(Keys.B))
                 {
                     _currentMap = 4;
                     LoadScreen(_currentMap);
+                    p.Pers = 0;
                 }
                 if (k.IsKeyDown(Keys.N))
                 {
                     _currentMap = 5;
                     LoadScreen(_currentMap);
+                    p.Pers = 0;
                 }
                 if (k.IsKeyDown(Keys.OemComma))
                 {
                     _currentMap = 6;
                     LoadScreen(_currentMap);
+                    p.Pers = 0;
                 }
 
                 //animation du personnage
@@ -545,21 +554,21 @@ namespace Amplis
                 }
             }
 
-
             if (_currentMap == 2 && state == State.Playing)
             {
                 _spriteBatch.Draw(bdf.Perso, f.Position);
                 _spriteBatch.Draw(dragon.Perso, d.Position);
             }
 
-
-
-
-
             _spriteBatch.End();
             base.Draw(gameTime);
         }
 
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            SaveData(_nbMort, _currentMap);
+            base.OnExiting(sender, args);
+        }
 
         private bool IsCollision(ushort x, ushort y, String layer)
         {
@@ -667,12 +676,7 @@ namespace Amplis
             _bossCanBeTouched = false;
             _dragonhealth = 3;
             p.Pers = 1;
-        }
-        private void InitMap5(Personnage p)
-        {
-            _camera.Position = new Vector2(p.X - 90, 0);
-            _camera.Origin = new Vector2(0, 0);
-            mapPart = MapPart.Mid;
+            p.PersDelay = 0;
         }
     }
 }
