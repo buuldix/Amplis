@@ -87,6 +87,7 @@ namespace Amplis
             state = State.Waiting;
             mapPart = MapPart.Start;
 
+
             var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1072);
             _camera = new OrthographicCamera(viewportadapter);
 
@@ -444,19 +445,42 @@ namespace Amplis
                 //gravité
                 p.Y += p.YVelocity;
 
-
-                if (k.IsKeyDown(Keys.L))
+                //changement map
+                if (k.IsKeyDown(Keys.W))
                 {
-                    _currentMap = 5;
+                    _currentMap = 0;
                     LoadScreen(_currentMap);
-                    if (_currentMap == 2)
-                        InitBoss();
                 }
-                else if (k.IsKeyDown(Keys.M))
+                if (k.IsKeyDown(Keys.X))
+                {
+                    _currentMap = 1;
+                    LoadScreen(_currentMap);
+                }
+                if (k.IsKeyDown(Keys.C))
+                {
+                    _currentMap = 2;
+                    LoadScreen(_currentMap);
+                    InitBoss();
+                }
+                if (k.IsKeyDown(Keys.V))
+                {
+                    _currentMap = 3;
+                    LoadScreen(_currentMap);
+                }
+                if (k.IsKeyDown(Keys.B))
+                {
+                    _currentMap = 4;
+                    LoadScreen(_currentMap);
+                }
+                if (k.IsKeyDown(Keys.N))
                 {
                     _currentMap = 5;
                     LoadScreen(_currentMap);
-                    InitMap5(p);
+                }
+                if (k.IsKeyDown(Keys.OemComma))
+                {
+                    _currentMap = 6;
+                    LoadScreen(_currentMap);
                 }
 
                 //animation du personnage
