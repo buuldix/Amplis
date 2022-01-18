@@ -54,6 +54,8 @@ namespace Amplis
         private readonly ScreenManager _screenManager;
         public enum State { Waiting = 0, Playing = 1 };
         private State state;
+        public enum MapPart { Start = 0, Mid = 1, End = 2 };
+        private MapPart mapPart;
 
         private int _nbMort;
         private SpriteFont _texte;
@@ -72,7 +74,6 @@ namespace Amplis
 
         //camera
         private OrthographicCamera _camera;
-        private Vector2 _cameraPosition;
 
 
 
@@ -96,17 +97,16 @@ namespace Amplis
             _positionTexte = new Vector2(1920 / 2 - 50, 1072 - 70);
 
             state = State.Waiting;
+            mapPart = MapPart.Start;
 
-            //choix niveau
             _currentMap = 2;
 
 
-            
+
 
             //camera
             var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1072);
             _camera = new OrthographicCamera(viewportadapter);
-            _cameraPosition = new Vector2(1920 / 2, 1072 / 2);
 
             base.Initialize();
         }
@@ -122,12 +122,8 @@ namespace Amplis
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
-            
-            _texte = Content.Load<SpriteFont>("file");
 
-            //_musiqueFond = Content.Load<Song>("lolo");
-            //MediaPlayer.Play(_musiqueFond);
-           // MediaPlayer.IsRepeating = true;
+            _texte = Content.Load<SpriteFont>("file");
 
             _sonCrie = Content.Load<SoundEffect>("crie");
             _sonGrincement = Content.Load<SoundEffect>("grincement");
@@ -155,9 +151,9 @@ namespace Amplis
                 string animation = p.Anim[p.Pers, 0];
 
 
-                ushort tx = (ushort)(p.Position.X / TiledMap.TileWidth);
-                ushort txright = (ushort)(p.Position.X / TiledMap.TileWidth + 1);
-                ushort txleft = (ushort)(p.Position.X / TiledMap.TileWidth - 1);
+                ushort tx = (ushort)(p.Position.X / TiledMap.TileWidth + 120 * (int)mapPart);
+                ushort txright = (ushort)(p.Position.X / TiledMap.TileWidth + 1 + 120 * (int)mapPart);
+                ushort txleft = (ushort)(p.Position.X / TiledMap.TileWidth - 1 + 120 * (int)mapPart);
                 ushort ty = (ushort)(p.Position.Y / TiledMap.TileHeight + 3);
                 ushort tyfeet = (ushort)(p.Position.Y / TiledMap.TileHeight + 2);
                 ushort tyarm = (ushort)(p.Position.Y / TiledMap.TileHeight + 1);
@@ -168,21 +164,22 @@ namespace Amplis
                 //camera
                 if (_currentMap == 5)
                 {
-                    _camera.LookAt(_cameraPosition);
-                    //TiledMapRenderer.Update(gameTime);
-                    MoveCamera(gameTime);
+                    _camera.LookAt(new Vector2(0, 0));
+                    _camera.Position = new Vector2(1920 * (int)mapPart, 0);
+                    _camera.Origin = new Vector2(0, 0);
+
                 }
 
                 //Boss
                 if (_currentMap == 2 && _isBossAlive)
                 {
                     //Console.WriteLine($"Charge : {_charge}\nCango : {f.CanGo}\nBossCanBeTouched : {_bossCanBeTouched}\nVie Boss : {_dragonhealth}");
-                    if(d.X > 1500 || d.X < 200)
+                    if (d.X > 1500 || d.X < 200)
                     {
                         d.XVelocity = -d.XVelocity;
                     }
                     IsMouseVisible = true;
-                    if ((_charge && f.CanGo)|| f.Position == new Vector2(-100,-100))
+                    if ((_charge && f.CanGo) || f.Position == new Vector2(-100, -100))
                     {
                         _sonFeu.Play();
                         f.Position = d.Position;
@@ -192,7 +189,7 @@ namespace Amplis
                         _charge = false;
                         f.CanGo = false;
                         _bossCanBeTouched = false;
-                        
+
                         bdfanimation = Animation(bossCharge, f.Position);
 
                     }
@@ -224,7 +221,7 @@ namespace Amplis
                         if (rpprojectil.Intersects(rbdf) && p.Pers == 1)
                         {
                             _sonFeu.Play();
-                            bossCharge = new Vector2(m.X,m.Y);
+                            bossCharge = new Vector2(m.X, m.Y);
                             bossChargeX = (f.X - bossCharge.X) / 100;
                             bossChargeY = (f.Y - bossCharge.Y) / 100;
                             f.CanGo = true;
@@ -246,21 +243,22 @@ namespace Amplis
                         _sonAie.Play();
                         _dragonhealth--;
                         f.Position = new Vector2(-100, -100);
-                        if (_dragonhealth == 0) {
+                        if (_dragonhealth == 0)
+                        {
                             _sonAie.Play();
-                            _sonGrincement.Play();                           
+                            _sonGrincement.Play();
                             _isBossAlive = false;
                             d.Position = new Vector2(-100, -100);
                             f.Position = new Vector2(-100, -100);
                             p.CanGo = true;
-                        }                   
+                        }
                     }
                     if (rp.Intersects(rbdf))
                     {
                         Mort();
                         InitBoss();
                     }
-                        
+
 
 
                     bdf.Perso.Play(bdfanimation);
@@ -398,8 +396,14 @@ namespace Amplis
                             animation = p.Anim[p.Pers, 3];
                         }
                     }
-
-
+                }else if ((k.IsKeyDown(Keys.D) || k.IsKeyDown(Keys.Right)) && !(p.Position.X + _perso.Perso.TextureRegion.Width / 2 < GraphicsDevice.Viewport.Width - p.XVelocity))
+                {
+                    if (mapPart == MapPart.Start)
+                        mapPart = MapPart.Mid;
+                    else if (mapPart == MapPart.Mid)
+                        mapPart = MapPart.End;
+                    p.X = 10;
+                
                 }
                 //déplacement vers la gauche
                 else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && p.Position.X - _perso.Perso.TextureRegion.Width / 2 > 0)
@@ -421,14 +425,19 @@ namespace Amplis
                             animation = p.Anim[p.Pers, 2];
                         }
                     }
-
-
-
+                }
+                else if ((k.IsKeyDown(Keys.Q) || k.IsKeyDown(Keys.Left)) && !(p.Position.X - _perso.Perso.TextureRegion.Width / 2 > 0))
+                {
+                    if (mapPart == MapPart.Mid)
+                        mapPart = MapPart.Start;
+                    else if (mapPart == MapPart.End)
+                        mapPart = MapPart.Mid;
+                    p.X = 1900;
                 }
 
-                //détection de collision avec le sol
+                    //détection de collision avec le sol
 
-                if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
+                    if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                 {
                     if (!IsCollision(tx, ty, "Collision") && !IsCollision(tx, ty, "Seum") || IsCollision(tx, ty, "Grimpe"))
                         p.Grounded = false;
@@ -462,15 +471,16 @@ namespace Amplis
 
                 if (k.IsKeyDown(Keys.L))
                 {
-                    _currentMap = 4;
+                    _currentMap = 5;
                     LoadScreen(_currentMap);
-                    if(_currentMap==2)
+                    if (_currentMap == 2)
                         InitBoss();
                 }
                 else if (k.IsKeyDown(Keys.M))
                 {
                     _currentMap = 5;
                     LoadScreen(_currentMap);
+                    InitMap5(p);
                 }
 
                 //animation du personnage
@@ -489,10 +499,10 @@ namespace Amplis
                     TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
                 if (IsCollision(mx, my, "Jouer") && m.LeftButton == ButtonState.Pressed)
                 {
-                    
+
                     _sonClic.Play();
                     p = new Personnage(new String[,] { { "idle", "walkSouth", "walkWest", "walkEast", "walkNorth" }, { "idle2", "walkSouth2", "walkWest2", "walkEast2", "walkNorth2" } });
-                    
+
                     if (_currentMap == 2)
                         InitBoss();
 
@@ -541,42 +551,13 @@ namespace Amplis
                 _spriteBatch.Draw(bdf.Perso, f.Position);
                 _spriteBatch.Draw(dragon.Perso, d.Position);
             }
-                
+
 
 
 
 
             _spriteBatch.End();
             base.Draw(gameTime);
-        }
-        //camera
-        private Vector2 GetMovementDirection()
-        {
-            var movementDirection = Vector2.Zero;
-            var state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Q) || state.IsKeyDown(Keys.Left))
-            {
-                movementDirection -= Vector2.UnitX;
-            }
-            if (state.IsKeyDown(Keys.D) || state.IsKeyDown(Keys.Right))
-            {
-                movementDirection += Vector2.UnitX;
-            }
-
-            if (movementDirection != Vector2.Zero)
-            {
-                movementDirection.Normalize();
-            }
-
-            return movementDirection;
-        }
-
-        private void MoveCamera(GameTime gameTime)
-        {
-            var speed = 200;
-            var seconds = gameTime.GetElapsedSeconds();
-            var movementDirection = GetMovementDirection();
-            _cameraPosition = speed * movementDirection * seconds;
         }
 
 
@@ -684,6 +665,12 @@ namespace Amplis
             _bossCanBeTouched = false;
             _dragonhealth = 3;
             p.Pers = 1;
+        }
+        private void InitMap5(Personnage p)
+        {
+            _camera.Position = new Vector2(p.X - 90, 0);
+            _camera.Origin = new Vector2(0, 0);
+            mapPart = MapPart.End;
         }
     }
 }
