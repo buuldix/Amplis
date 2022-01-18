@@ -98,7 +98,7 @@ namespace Amplis
             state = State.Waiting;
 
             //choix niveau
-            _currentMap = 6;
+            _currentMap = 3;
 
 
             
@@ -119,7 +119,7 @@ namespace Amplis
             TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1072;
-            _graphics.IsFullScreen = true;
+            _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
             TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
             
