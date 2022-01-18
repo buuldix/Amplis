@@ -99,10 +99,7 @@ namespace Amplis
             state = State.Waiting;
             mapPart = MapPart.Start;
 
-            _currentMap = 2;
-
-
-
+            //_currentMap = 2;
 
             //camera
             var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1072);
@@ -302,7 +299,7 @@ namespace Amplis
                 //saut
                 if (k.IsKeyDown(Keys.Space) && p.Grounded)
                 {
-                    _sonSaut.Play(0.2f, 0.0f, 0.0f);
+                    _sonSaut.Play(0.15f, 0.0f, 0.0f);
                     p.XVelocity = 4;
                     if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                     {
@@ -580,6 +577,8 @@ namespace Amplis
             _nbMort++;
             TiledMap.GetLayer<TiledMapTileLayer>("Objet").IsVisible = true;
             p.CanGo = false;
+            if (_currentMap == 5)
+                mapPart = MapPart.Start;
             LoadScreen(_currentMap);
             p.YVelocity = 0;
             _sonCrie.Play();
