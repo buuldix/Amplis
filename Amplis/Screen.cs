@@ -1,11 +1,8 @@
 ﻿using MonoGame.Extended.Screens;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Amplis
 {

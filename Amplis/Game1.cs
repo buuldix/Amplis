@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Content;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
-using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
@@ -61,7 +59,6 @@ namespace Amplis
         private SpriteFont _texte;
         private Vector2 _positionTexte;
 
-        private Song _musiqueFond;
         private SoundEffect _sonCrie;
         private SoundEffect _sonGrincement;
         private SoundEffect _sonClic;
@@ -69,15 +66,7 @@ namespace Amplis
         private SoundEffect _sonSaut;
         private SoundEffect _sonFeu;
         private SoundEffect _sonAie;
-
-
-
-        //camera
         private OrthographicCamera _camera;
-
-
-
-
 
         public Game1()
         {
@@ -99,9 +88,6 @@ namespace Amplis
             state = State.Waiting;
             mapPart = MapPart.Start;
 
-            //_currentMap = 2;
-
-            //camera
             var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1072);
             _camera = new OrthographicCamera(viewportadapter);
 
@@ -119,9 +105,7 @@ namespace Amplis
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
-
             _texte = Content.Load<SpriteFont>("file");
-
             _sonCrie = Content.Load<SoundEffect>("crie");
             _sonGrincement = Content.Load<SoundEffect>("grincement");
             _sonClic = Content.Load<SoundEffect>("clic");
@@ -147,7 +131,6 @@ namespace Amplis
             {
                 string animation = p.Anim[p.Pers, 0];
 
-
                 ushort tx = (ushort)(p.Position.X / TiledMap.TileWidth + 120 * (int)mapPart);
                 ushort txright = (ushort)(p.Position.X / TiledMap.TileWidth + 1 + 120 * (int)mapPart);
                 ushort txleft = (ushort)(p.Position.X / TiledMap.TileWidth - 1 + 120 * (int)mapPart);
@@ -157,11 +140,9 @@ namespace Amplis
                 ushort tychest = (ushort)(p.Position.Y / TiledMap.TileHeight);
                 ushort tyhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 1);
                 ushort tyoverhead = (ushort)(p.Position.Y / TiledMap.TileHeight - 2);
-
-                //camera
+                //Map avec une caméra
                 if (_currentMap == 5)
                 {
-                    _camera.LookAt(new Vector2(0, 0));
                     _camera.Position = new Vector2(1920 * (int)mapPart, 0);
                     _camera.Origin = new Vector2(0, 0);
 
@@ -170,7 +151,6 @@ namespace Amplis
                 //Boss
                 if (_currentMap == 2 && _isBossAlive)
                 {
-                    //Console.WriteLine($"Charge : {_charge}\nCango : {f.CanGo}\nBossCanBeTouched : {_bossCanBeTouched}\nVie Boss : {_dragonhealth}");
                     if (d.X > 1500 || d.X < 200)
                     {
                         d.XVelocity = -d.XVelocity;
@@ -669,7 +649,7 @@ namespace Amplis
         {
             _camera.Position = new Vector2(p.X - 90, 0);
             _camera.Origin = new Vector2(0, 0);
-            mapPart = MapPart.End;
+            mapPart = MapPart.Mid;
         }
     }
 }
