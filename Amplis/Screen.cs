@@ -1,11 +1,8 @@
 ﻿using MonoGame.Extended.Screens;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Amplis
 {
@@ -15,7 +12,6 @@ namespace Amplis
         private int _map;
         String[] scene = new String[] { "map1", "map2", "mapBoss", "Map1M2", "Map2M2", "Lastmap", "oeuvreDart" };
         Vector2[] spawn = new Vector2[] { new Vector2(100, 900), new Vector2(100, 150), new Vector2(100, 500),new Vector2(100,900), new Vector2(90, 120),new Vector2(90,130), new Vector2(-100, 1500)};
-
 
         public int Map { get => _map; set => _map = value; }
 
