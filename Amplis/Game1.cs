@@ -279,7 +279,7 @@ namespace Amplis
                 //saut
                 if (k.IsKeyDown(Keys.Space) && p.Grounded)
                 {
-                    _sonSaut.Play(0.15f, 0.0f, 0.0f);
+                    _sonSaut.Play(0.1f, 0.0f, 0.0f);
                     p.XVelocity = 4;
                     if (TiledMap.GetLayer<TiledMapTileLayer>("Seum").IsVisible)
                     {
