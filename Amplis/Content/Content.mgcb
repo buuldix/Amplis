@@ -151,12 +151,6 @@
 /processor:TiledMapTilesetProcessor
 /build:logoGrand.tsx
 
-#begin lolo.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:lolo.mp3
-
 #begin map1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor

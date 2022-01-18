@@ -10,7 +10,6 @@ using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using System;
 using System.IO;
-using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
@@ -61,7 +60,6 @@ namespace Amplis
         private SpriteFont _texte;
         private Vector2 _positionTexte;
 
-        private Song _musiqueFond;
         private SoundEffect _sonCrie;
         private SoundEffect _sonGrincement;
         private SoundEffect _sonClic;
@@ -99,7 +97,7 @@ namespace Amplis
             state = State.Waiting;
             mapPart = MapPart.Start;
 
-            _currentMap = 2;
+            _currentMap = 6;
 
 
 
@@ -119,7 +117,7 @@ namespace Amplis
             TiledMap.GetLayer<TiledMapTileLayer>("Logo").IsVisible = false;
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1072;
-            _graphics.IsFullScreen = false;
+            _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             TiledMapRenderer = new TiledMapRenderer(GraphicsDevice, TiledMap);
 
