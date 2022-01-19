@@ -342,6 +342,8 @@ namespace Amplis
                         p.ChangePers();
                         p.PersDelay = 0;
                     }
+                    if (_currentMap == 6)
+                        mapPart = MapPart.Start;
                         
                 }
 
